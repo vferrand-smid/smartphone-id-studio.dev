@@ -2,4 +2,10 @@
   from = "/*"
   to = "/index.html"
   status = 200
-  force = true
+  force = false
+
+# Redirections spécifiques, si nécessaire
+[[redirects]]
+  from = "/old-page"
+  to = "/new-page"
+  status = 301
