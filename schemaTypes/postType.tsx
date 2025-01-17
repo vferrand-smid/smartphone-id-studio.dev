@@ -24,7 +24,7 @@ export const postType = defineType({
         },
       ],
     })
-  ]
+  ],
     fields: [
         defineField({
             name: 'title',
