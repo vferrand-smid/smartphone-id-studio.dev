@@ -1,8 +1,9 @@
+/*
 import {defineField, defineType} from 'sanity'
 import {defineArrayMember} from 'sanity'
 import {Card, Text} from '@sanity/ui'
 
-export const postType = defineType({
+export const OLD_postType = defineType({
     name: 'post',
     title: 'Post',
     type: 'document',
@@ -68,3 +69,4 @@ export const postType = defineType({
         }),
     ],
 });
+*/
