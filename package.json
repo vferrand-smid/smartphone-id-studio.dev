@@ -1,5 +1,5 @@
 {
-  "name": "smartphone-iddev",
+  "name": "smartphone-id-dev",
   "private": true,
   "version": "1.0.0",
   "main": "package.json",
@@ -15,14 +15,17 @@
     "sanity"
   ],
   "dependencies": {
-    "@sanity/vision": "^3.69.0",
+    "@sanity/icons": "^3.6.0",
+    "@sanity/vision": "^3.70.0",
+    "@sanity/visual-editing": "^2.12.3",
+    "framer-motion": "^12.4.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sanity": "^3.69.0",
+    "sanity": "^3.70.0",
     "styled-components": "^6.1.8"
   },
   "devDependencies": {
-    "@portabletext/block-tools": "^1.1.8",
+    "@portabletext/block-tools": "^1.1.7",
     "@sanity/eslint-config-studio": "^5.0.1",
     "@types/react": "^18.0.25",
     "@wordpress/block-serialization-default-parser": "^5.18.0",

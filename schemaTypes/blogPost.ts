@@ -29,6 +29,20 @@ export const blogPost = defineType({
             validation: (Rule) => Rule.required(),
         }),
         defineField({
+            name: 'locale',
+            title: 'Locale',
+            type: 'string',
+            options: {
+                list: [
+                    { title: 'English (UK)', value: 'en-GB' },
+                    { title: 'French (France)', value: 'fr-FR' },
+                    { title: 'Spanish (Spain)', value: 'es-ES' },
+                    // Ajoutez d'autres locales ici selon vos besoins
+                ],
+            },
+            validation: (rule) => rule.required(),
+        }),
+        defineField({
             name: 'image',
             type: 'image',
             title: 'Main Image',
@@ -58,6 +72,7 @@ export const blogPost = defineType({
                         defineField({
                             name: 'content',
                             type: 'array',
+                            title: 'Content',
                             of: [{ type: 'block' }],
                         }),
                     ],
