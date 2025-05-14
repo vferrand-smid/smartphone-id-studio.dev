@@ -12,3 +12,7 @@ Now you can do the following things:
 ## GIT
 ssh-add ~/.ssh/id_rsa_vferrand-smid
 ssh -T git@github.com
+
+npm update @sanity/ui @sanity/base framer-motion
+rm -rf node_modules package-lock.json
+npm install 

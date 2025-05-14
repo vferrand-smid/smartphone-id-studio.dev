@@ -1,14 +1,17 @@
 import {authorType} from './authorType'
-import {blogPost} from "./blogPost";
 import {externalImageType} from './externalImageType'
+import link from './link'
 import {pageType} from './pageType'
-import {portableTextType} from './portableTextType';
-//import {OLD_postType} from './OLD_postType'
+import blockContent from './portableTextType'
+import tableOfContents from './tableOfContents'
+import videoEmbed from './videoEmbed'
 
 export const schemaTypes = [
-    authorType,
-    blogPost,
-    externalImageType,
-    pageType,
-    portableTextType,
+  authorType,
+  externalImageType,
+  pageType,
+  videoEmbed,
+  link,
+  tableOfContents,
+  blockContent,
 ]

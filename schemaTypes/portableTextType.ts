@@ -1,7 +1,19 @@
-import {defineField} from 'sanity'
+import {defineType} from 'sanity'
 
-export const portableTextType = defineField({
-    name: 'portableText',
-    type: 'array',
-    of: [{type: 'block'}, {type: 'image'}, {type: 'externalImage'}],
+export default defineType({
+  name: 'blockContent',
+  title: 'Contenu riche',
+  type: 'array',
+  of: [
+    {type: 'block'},
+    {
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    },
+    {type: 'videoEmbed'},
+    {type: 'link'},
+    {type: 'tableOfContents'},
+  ],
 })
