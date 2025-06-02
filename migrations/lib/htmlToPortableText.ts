@@ -5,10 +5,6 @@ import {decode} from 'html-entities'
 import {HTMLElement, parse} from 'node-html-parser'
 import pLimit from 'p-limit'
 
-function wait(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
-
 const sanityClient = createClient({
   projectId: 'uvnumxlz',
   dataset: 'dev',
@@ -21,7 +17,7 @@ const imageCachePath = './.sanityImageCache.json'
 const limit = pLimit(1)
 let imageCache: Map<string, string> = new Map()
 
-async function loadImageCache() {
+export async function loadImageCache() {
   try {
     const data = await fs.readFile(imageCachePath, 'utf8')
     imageCache = new Map(Object.entries(JSON.parse(data)))
@@ -30,7 +26,7 @@ async function loadImageCache() {
   }
 }
 
-async function saveImageCache() {
+export async function saveImageCache() {
   await fs.writeFile(imageCachePath, JSON.stringify(Object.fromEntries(imageCache)), 'utf8')
 }
 
@@ -44,14 +40,13 @@ async function uploadImageToSanity(url: string) {
     }
 
     try {
-      await wait(15000)
+      await new Promise((r) => setTimeout(r, 15000))
       const response = await axios.get(url, {responseType: 'arraybuffer'})
       const asset = await sanityClient.assets.upload('image', response.data, {
         filename: url.split('/').pop(),
       })
 
       imageCache.set(url, asset._id)
-
       return {
         _type: 'image',
         asset: {_type: 'reference', _ref: asset._id},
@@ -63,40 +58,120 @@ async function uploadImageToSanity(url: string) {
   })
 }
 
+function parseSpansRich(node: HTMLElement): any[] {
+  const spans: any[] = []
+
+  node.childNodes.forEach((child) => {
+    if (child.nodeType === 3) {
+      const text = decode(child.rawText || '').trim()
+      if (text) spans.push({_type: 'span', text, marks: []})
+      return
+    }
+
+    if (child instanceof HTMLElement) {
+      const raw = decode(child.innerText || '').trim()
+      if (!raw) return
+
+      const marks: string[] = []
+      if (child.tagName === 'STRONG') marks.push('strong')
+      if (child.tagName === 'EM') marks.push('em')
+      if (child.tagName === 'A') {
+        const href = child.getAttribute('href') || '#'
+        const key = `link-${href}`
+        marks.push(key)
+      }
+
+      spans.push({_type: 'span', text: raw, marks})
+    }
+  })
+
+  return spans
+}
+
 export async function htmlToPortableText(html: string) {
   if (!html) return []
 
   const root = parse(html)
   const blocks: any[] = []
 
+  // TOC depuis les H2/H3 (hors FAQ)
+  const tocBlocks: any[] = []
+  const headings = root.querySelectorAll('h2, h3')
+
+  let inFAQ = false
+  let index = 1
+
+  for (const heading of headings) {
+    const text = decode(heading.textContent || '').trim()
+
+    // Marque d’entrée dans la FAQ
+    if (heading.tagName === 'H2' && /faq/i.test(text)) {
+      inFAQ = true
+      continue
+    }
+
+    if (inFAQ) continue
+
+    const slug = heading.getAttribute('id') || text.toLowerCase().replace(/[^\w]+/g, '-')
+    heading.setAttribute('id', slug)
+
+    tocBlocks.push({
+      _type: 'block',
+      style: 'normal',
+      children: [{_type: 'span', text: `${index}. ${text}`, marks: [`link-#${slug}`]}],
+
+      markDefs: [
+        {
+          _type: 'link',
+          _key: `link-#${slug}`,
+          href: `#${slug}`,
+        },
+      ],
+    })
+    index++
+  }
+
+  if (tocBlocks.length > 0) {
+    blocks.unshift(
+      {
+        _type: 'block',
+        style: 'h2',
+        children: [
+          {
+            _type: 'span',
+            text: 'Table des matières',
+            marks: [],
+          },
+        ],
+        customStyle: 'toc-title',
+      },
+      ...tocBlocks,
+    )
+  }
+
+  // 🎯 CONTENU PRINCIPAL
   for (const node of root.childNodes) {
     if (!(node instanceof HTMLElement)) continue
 
     switch (node.tagName) {
       case 'P':
-        blocks.push({
-          _type: 'block',
-          style: 'normal',
-          children: parseSpans(node),
-        })
+      case 'DIV': {
+        const children = parseSpansRich(node)
+        if (children.length > 0) {
+          blocks.push({_type: 'block', style: 'normal', children})
+        }
         break
+      }
 
+      case 'H1':
       case 'H2':
       case 'H3':
-        blocks.push({
-          _type: 'block',
-          style: node.tagName.toLowerCase(),
-          children: parseSpans(node),
-        })
-        break
-
-      case 'FIGURE':
-      case 'IMG': {
-        const imgNode = node.querySelector('img') || node
-        const src = imgNode.getAttribute('src')
-        if (src) {
-          const imageBlock = await uploadImageToSanity(src)
-          if (imageBlock) blocks.push(imageBlock)
+      case 'H4':
+      case 'H5':
+      case 'H6': {
+        const children = parseSpansRich(node)
+        if (children.length > 0) {
+          blocks.push({_type: 'block', style: node.tagName.toLowerCase(), children})
         }
         break
       }
@@ -104,53 +179,68 @@ export async function htmlToPortableText(html: string) {
       case 'UL':
       case 'OL': {
         const isOrdered = node.tagName === 'OL'
-        const items = node.querySelectorAll('li')
-        for (const li of items) {
+        node.querySelectorAll(':scope > li').forEach((li) => {
           const link = li.querySelector('a')
-          const text = decode(link?.innerText || li.innerText)
+          const text = decode(link?.textContent || li.textContent || '').trim()
           const href = link?.getAttribute('href')
-
           const markKey = href ? `link-${href}` : undefined
 
-          if (href) {
-            blocks.push({
-              _type: 'block',
-              style: 'normal',
-              listItem: isOrdered ? 'number' : 'bullet',
-              markDefs: [
-                {
-                  _type: 'link',
-                  _key: markKey,
-                  href,
-                },
-              ],
-              children: [
-                {
-                  _type: 'span',
-                  text,
-                  marks: [markKey],
-                },
-              ],
-            })
-          } else {
-            blocks.push({
-              _type: 'block',
-              style: 'normal',
-              listItem: isOrdered ? 'number' : 'bullet',
-              children: [{_type: 'span', text, marks: []}],
-            })
+          const block: any = {
+            _type: 'block',
+            style: 'normal',
+            listItem: isOrdered ? 'number' : 'bullet',
+            children: [{_type: 'span', text, marks: href ? [markKey] : []}],
+            markDefs: href ? [{_type: 'link', _key: markKey, href}] : [],
+          }
+
+          blocks.push(block)
+        })
+        break
+      }
+
+      case 'FIGURE': {
+        const img = node.querySelector('img')
+        const caption = decode(node.querySelector('figcaption')?.textContent || '').trim()
+        if (img) {
+          const src = img.getAttribute('src')
+          if (src) {
+            const imageBlock = await uploadImageToSanity(src)
+            if (imageBlock) blocks.push({...imageBlock, caption})
           }
         }
+        break
+      }
+
+      case 'IMG': {
+        const src = node.getAttribute('src')
+        if (src) {
+          const imageBlock = await uploadImageToSanity(src)
+          if (imageBlock) blocks.push(imageBlock)
+        }
+        break
       }
 
       case 'IFRAME': {
         const src = node.getAttribute('src')
-        if (src) {
-          blocks.push({
-            _type: 'videoEmbed',
-            url: src,
-          })
+        if (src) blocks.push({_type: 'videoEmbed', url: src})
+        break
+      }
+
+      case 'TABLE': {
+        const rows: any[] = []
+        const headerRows = node.querySelectorAll('thead tr')
+        const bodyRows = node.querySelectorAll('tbody tr')
+
+        for (const row of [...headerRows, ...bodyRows]) {
+          const isHeader = row.parentNode?.tagName === 'THEAD'
+          const cells = row
+            .querySelectorAll(isHeader ? 'th' : 'td')
+            .map((cell) => decode(cell.text.trim()))
+
+          rows.push({_type: 'tableRow', cells, isHeader})
         }
+
+        blocks.push({_type: 'table', rows})
         break
       }
     }
@@ -158,25 +248,3 @@ export async function htmlToPortableText(html: string) {
 
   return blocks
 }
-
-function parseSpans(node: HTMLElement) {
-  const spans: any[] = []
-  node.childNodes.forEach((child) => {
-    if (child instanceof HTMLElement && child.tagName === 'A') {
-      const href = child.getAttribute('href') || '#'
-      spans.push({
-        _type: 'span',
-        text: decode(child.text || ''),
-        marks: [`link-${href}`],
-      })
-    } else {
-      spans.push({
-        _type: 'span',
-        text: decode((child.text || '').trim()),
-        marks: [],
-      })
-    }
-  })
-  return spans
-}
-export {loadImageCache, saveImageCache}

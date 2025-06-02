@@ -12,6 +12,7 @@
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
     "build:migrations": "tsc --build tsconfig.migrations.json",
+    "migrate:wp-pages": "sanity migration run import-wp-rest --dataset dev --project uvnumxlz --no-dry-run",
     "migrate:pages": "sanity migration run import-wp-graphql --dataset dev --project uvnumxlz --no-dry-run",
     "count-pages": "tsx migrations/count-pages/index.ts",
     "delete-pages": "dotenv -e .env -- tsx migrations/tools/delete-pages.ts"

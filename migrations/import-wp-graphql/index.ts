@@ -1,3 +1,5 @@
+// SCRIPT POUR IMPORTER LES PAGES DE WP AVEC GRAPHQL
+
 import {GraphQLClient, gql} from 'graphql-request'
 import {createOrReplace, defineMigration} from 'sanity/migrate'
 import {htmlToPortableText, loadImageCache, saveImageCache} from '../lib/htmlToPortableText'
@@ -22,7 +24,7 @@ const GET_PAGES = gql`
           slug
           title
           content
-          date 
+          date
           modified
           status
           language {
@@ -52,6 +54,7 @@ export default defineMigration({
 
         const docsPromises = pages.edges.map(async ({node}: any) => {
           try {
+            console.log(`💡 HTML reçu pour ${node.slug}:\n`, node.content)
             const parsedContent = await htmlToPortableText(node.content)
 
             return createOrReplace({
