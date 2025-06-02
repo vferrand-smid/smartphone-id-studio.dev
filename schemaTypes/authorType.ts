@@ -3,13 +3,14 @@ import {defineField, defineType} from 'sanity'
 
 export const authorType = defineType({
   name: 'author',
-  title: 'Author',
+  title: 'Auteurs',
   type: 'document',
   icon: UserIcon,
   fields: [
     defineField({name: 'name', type: 'string'}),
     defineField({name: 'description', type: 'text'}),
     defineField({name: 'avatar', type: 'image'}),
+    defineField({name: 'link', type: 'url'}),
   ],
   preview: {
     select: {
