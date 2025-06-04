@@ -30,7 +30,11 @@
     "@sanity/insert-menu": "^1.1.11",
     "@sanity/table": "^1.1.3",
     "@sanity/types": "^3.88.3",
+<<<<<<< HEAD
     "@sanity/vision": "^3.92.0",
+=======
+    "@sanity/vision": "^3.91.0",
+>>>>>>> 7decfd6 (changement de branche)
     "@sanity/visual-editing": "^2.13.21",
     "@sindresorhus/slugify": "^2.2.1",
     "@types/axios": "^0.14.4",
@@ -44,8 +48,12 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
+<<<<<<< HEAD
     "sanity": "^3.92.0",
     "slugify": "^1.6.6",
+=======
+    "sanity": "^3.90.0",
+>>>>>>> 7decfd6 (changement de branche)
     "styled-components": "^6.1.18"
   },
   "overrides": {
