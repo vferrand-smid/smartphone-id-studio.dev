@@ -8,6 +8,7 @@ import {htmlToPortableText, loadImageCache, saveImageCache} from '../lib/htmlToP
 import {mapWpmlToSanityLocale} from '../lib/localeMapping'
 
 // Langue WordPress à importer
+
 const LANGUAGE_CODE = 'it'
 
 const limit = pLimit(5)
