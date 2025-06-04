@@ -100,7 +100,7 @@ export const pageType = defineType({
           {title: 'Russian (Russia)', value: 'ru-RU'},
           {title: 'Русский', value: 'ru'},
           {title: 'Spanish (Argentina)', value: 'es-AR'},
-          {title: 'Swedish (Sweden)', value: 'sv-SE'},
+          // {title: 'Swedish (Sweden)', value: 'sv-SE'},
         ],
       },
       validation: (Rule) => Rule.required(),
