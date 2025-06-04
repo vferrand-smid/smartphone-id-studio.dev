@@ -7,7 +7,7 @@ import {htmlToPortableText, loadImageCache, saveImageCache} from '../lib/htmlToP
 import {mapWpmlToSanityLocale} from '../lib/localeMapping'
 
 // Langue WordPress à importer
-const LANGUAGE_CODE = 'ne'
+const LANGUAGE_CODE = 'en_US'
 
 // Mappage vers Sanity
 const SANITY_LOCALE = mapWpmlToSanityLocale(LANGUAGE_CODE)
@@ -42,10 +42,10 @@ export default defineMigration({
 
         const docsPromises = pages.map(async (pageItem: any) => {
           try {
-            console.log(
-              `💡 HTML reçu pour ${pageItem.slug}:\n`,
-              pageItem.content?.rendered?.includes('lwptoc') ? '✅ TOC détecté' : '❌ Pas de TOC',
-            )
+            // console.log(
+            //   `💡 HTML reçu pour ${pageItem.slug}:\n`,
+            //   pageItem.content?.rendered?.includes('lwptoc') ? '✅ TOC détecté' : '❌ Pas de TOC',
+            // )
 
             const parsedContent = await htmlToPortableText(pageItem.content?.rendered || '')
 

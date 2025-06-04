@@ -8,10 +8,10 @@ import './styles/global.css'
 
 export default defineConfig({
   name: 'default',
-  title: 'smartphone-id.dev',
+  title: 'smartphone-id.test',
 
-  projectId: 'uvnumxlz',
-  dataset: 'dev',
+  projectId: '1t78evbt',
+  dataset: 'test',
 
   plugins: [
     structureTool({structure}),

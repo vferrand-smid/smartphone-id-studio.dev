@@ -4,8 +4,8 @@ import {createClient} from '@sanity/client'
 const TARGET_LOCALE = 'fr-CA'
 
 const client = createClient({
-  projectId: 'uvnumxlz',
-  dataset: 'dev',
+  projectId: '1t78evbt',
+  dataset: 'test',
   token: process.env.SANITY_API_TOKEN,
   useCdn: false,
   apiVersion: '2023-10-10',

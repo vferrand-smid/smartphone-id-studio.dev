@@ -1,5 +1,5 @@
 {
-  "name": "smartphone-id-dev",
+  "name": "smartphone-id.dev",
   "private": true,
   "version": "1.0.0",
   "main": "package.json",
@@ -12,8 +12,8 @@
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
     "build:migrations": "tsc --build tsconfig.migrations.json",
-    "migrate:wp-pages": "sanity migration run import-wp-rest --dataset dev --project uvnumxlz --no-dry-run",
-    "migrate:pages": "sanity migration run import-wp-graphql --dataset dev --project uvnumxlz --no-dry-run",
+    "migrate:wp-pages": "sanity migration run import-wp-rest --dataset test --project 1t78evbt --no-dry-run",
+    "migrate:pages": "sanity migration run import-wp-graphql --dataset test --project 1t78evbt --no-dry-run",
     "count-pages": "tsx migrations/count-pages/index.ts",
     "delete-pages": "dotenv -e .env -- tsx migrations/tools/delete-pages.ts"
   },
@@ -35,6 +35,7 @@
     "framer-motion": "^12.4.3",
     "graphql": "^16.11.0",
     "graphql-request": "^7.1.2",
+    "node-fetch": "^3.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
@@ -56,7 +57,7 @@
     "jsdom": "^26.1.0",
     "p-limit": "^6.2.0",
     "prettier": "^3.0.2",
-    "tsx": "^4.19.3",
+    "tsx": "^4.19.4",
     "typescript": "^5.1.6",
     "wp-types": "^4.68.0"
   },

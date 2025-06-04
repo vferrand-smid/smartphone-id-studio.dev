@@ -6,8 +6,8 @@ import {HTMLElement, parse} from 'node-html-parser'
 import pLimit from 'p-limit'
 
 const sanityClient = createClient({
-  projectId: 'uvnumxlz',
-  dataset: 'dev',
+  projectId: '1t78evbt',
+  dataset: 'test',
   token: process.env.SANITY_API_TOKEN,
   useCdn: false,
   apiVersion: '2023-03-25',
