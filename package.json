@@ -15,6 +15,7 @@
     "migrate:wp-pages": "sanity migration run import-wp-rest --dataset test --project 1t78evbt --no-dry-run",
     "migrate:pages": "sanity migration run import-wp-graphql --dataset test --project 1t78evbt --no-dry-run",
     "count-pages": "tsx migrations/count-pages/index.ts",
+    "count-pages-sanity": "tsx migrations/count-pages/countPagesSanity.ts",
     "delete-pages": "dotenv -e .env -- tsx migrations/tools/delete-pages.ts"
   },
   "keywords": [
@@ -26,7 +27,7 @@
     "@sanity/icons": "^3.6.0",
     "@sanity/insert-menu": "^1.1.11",
     "@sanity/types": "^3.88.3",
-    "@sanity/vision": "^3.90.0",
+    "@sanity/vision": "^3.91.0",
     "@sanity/visual-editing": "^2.13.21",
     "@types/axios": "^0.14.4",
     "@types/dotenv": "^8.2.3",
@@ -40,7 +41,7 @@
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
     "sanity": "^3.90.0",
-    "styled-components": "^6.1.8"
+    "styled-components": "^6.1.18"
   },
   "overrides": {
     "@sanity/types": "^3.88.3"
