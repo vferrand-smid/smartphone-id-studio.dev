@@ -190,86 +190,86 @@ export type ExternalImage = {
   url?: string
 }
 
-export type BlogPost = {
-  _id: string
-  _type: 'blogPost'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title?: string
-  slug?: Slug
-  publishedAt?: string
-  locale?: 'en-GB' | 'fr-FR' | 'es-ES'
-  image?: {
-    asset?: {
-      _ref: string
-      _type: 'reference'
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
-    }
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    _type: 'image'
-  }
-  body?: Array<
-    | {
-        children?: Array<{
-          marks?: Array<string>
-          text?: string
-          _type: 'span'
-          _key: string
-        }>
-        style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
-        listItem?: 'bullet' | 'number'
-        markDefs?: Array<{
-          href?: string
-          _type: 'link'
-          _key: string
-        }>
-        level?: number
-        _type: 'block'
-        _key: string
-      }
-    | {
-        asset?: {
-          _ref: string
-          _type: 'reference'
-          _weak?: boolean
-          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
-        }
-        media?: unknown
-        hotspot?: SanityImageHotspot
-        crop?: SanityImageCrop
-        _type: 'image'
-        _key: string
-      }
-    | {
-        heading?: string
-        content?: Array<{
-          children?: Array<{
-            marks?: Array<string>
-            text?: string
-            _type: 'span'
-            _key: string
-          }>
-          style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
-          listItem?: 'bullet' | 'number'
-          markDefs?: Array<{
-            href?: string
-            _type: 'link'
-            _key: string
-          }>
-          level?: number
-          _type: 'block'
-          _key: string
-        }>
-        _type: 'section'
-        _key: string
-      }
-  >
-  links?: Array<string>
-}
+// export type BlogPost = {
+//   _id: string
+//   _type: 'blogPost'
+//   _createdAt: string
+//   _updatedAt: string
+//   _rev: string
+//   title?: string
+//   slug?: Slug
+//   publishedAt?: string
+//   locale?: 'en-GB' | 'fr-FR' | 'es-ES'
+//   image?: {
+//     asset?: {
+//       _ref: string
+//       _type: 'reference'
+//       _weak?: boolean
+//       [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+//     }
+//     media?: unknown
+//     hotspot?: SanityImageHotspot
+//     crop?: SanityImageCrop
+//     _type: 'image'
+//   }
+//   body?: Array<
+//     | {
+//         children?: Array<{
+//           marks?: Array<string>
+//           text?: string
+//           _type: 'span'
+//           _key: string
+//         }>
+//         style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
+//         listItem?: 'bullet' | 'number'
+//         markDefs?: Array<{
+//           href?: string
+//           _type: 'link'
+//           _key: string
+//         }>
+//         level?: number
+//         _type: 'block'
+//         _key: string
+//       }
+//     | {
+//         asset?: {
+//           _ref: string
+//           _type: 'reference'
+//           _weak?: boolean
+//           [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+//         }
+//         media?: unknown
+//         hotspot?: SanityImageHotspot
+//         crop?: SanityImageCrop
+//         _type: 'image'
+//         _key: string
+//       }
+//     | {
+//         heading?: string
+//         content?: Array<{
+//           children?: Array<{
+//             marks?: Array<string>
+//             text?: string
+//             _type: 'span'
+//             _key: string
+//           }>
+//           style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
+//           listItem?: 'bullet' | 'number'
+//           markDefs?: Array<{
+//             href?: string
+//             _type: 'link'
+//             _key: string
+//           }>
+//           level?: number
+//           _type: 'block'
+//           _key: string
+//         }>
+//         _type: 'section'
+//         _key: string
+//       }
+//   >
+//   links?: Array<string>
+// }
 
 export type Slug = {
   _type: 'slug'
@@ -365,7 +365,7 @@ export type AllSanitySchemaTypes =
   | PortableText
   | Page
   | ExternalImage
-  | BlogPost
+  // |BlogPost
   | Slug
   | Author
   | SanityImageCrop
