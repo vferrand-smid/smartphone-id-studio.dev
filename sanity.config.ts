@@ -8,10 +8,10 @@ import './styles/global.css'
 
 export default defineConfig({
   name: 'default',
-  title: 'smartphone-id.dev',
+  title: 'smartphone-id.test',
 
-  projectId: 'uvnumxlz',
-  dataset: 'dev',
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID!,
+  dataset: process.env.SANITY_STUDIO_DATASET!,
 
   plugins: [
     structureTool({structure}),

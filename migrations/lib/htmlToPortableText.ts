@@ -1,17 +1,22 @@
 import {createClient} from '@sanity/client'
 import axios from 'axios'
+import crypto from 'crypto'
 import fs from 'fs/promises'
 import {decode} from 'html-entities'
 import {HTMLElement, parse} from 'node-html-parser'
 import pLimit from 'p-limit'
 
 const sanityClient = createClient({
-  projectId: 'uvnumxlz',
-  dataset: 'dev',
+  projectId: process.env.SANITY_PROJECT_ID!,
+  dataset: process.env.SANITY_DATASET!,
+  apiVersion: process.env.SANITY_API_VERSION!,
   token: process.env.SANITY_API_TOKEN,
   useCdn: false,
-  apiVersion: '2023-03-25',
 })
+
+function hashBuffer(buffer: Buffer): string {
+  return crypto.createHash('sha1').update(buffer).digest('hex')
+}
 
 const imageCachePath = './.sanityImageCache.json'
 const limit = pLimit(1)
@@ -32,21 +37,26 @@ export async function saveImageCache() {
 
 async function uploadImageToSanity(url: string) {
   return limit(async () => {
-    if (imageCache.has(url)) {
-      return {
-        _type: 'image',
-        asset: {_type: 'reference', _ref: imageCache.get(url)!},
-      }
-    }
-
     try {
-      await new Promise((r) => setTimeout(r, 15000))
       const response = await axios.get(url, {responseType: 'arraybuffer'})
-      const asset = await sanityClient.assets.upload('image', response.data, {
+      const buffer = Buffer.from(response.data)
+      const hash = hashBuffer(buffer)
+
+      if (imageCache.has(hash)) {
+        return {
+          _type: 'image',
+          asset: {_type: 'reference', _ref: imageCache.get(hash)!},
+        }
+      }
+
+      // Lenteur volontaire seulement pour test réseau ou API
+      // await new Promise((r) => setTimeout(r, 15000))
+
+      const asset = await sanityClient.assets.upload('image', buffer, {
         filename: url.split('/').pop(),
       })
 
-      imageCache.set(url, asset._id)
+      imageCache.set(hash, asset._id)
       return {
         _type: 'image',
         asset: {_type: 'reference', _ref: asset._id},
@@ -199,6 +209,27 @@ export async function htmlToPortableText(html: string) {
       }
 
       case 'FIGURE': {
+        const table = node.querySelector('table')
+        if (table) {
+          const rows: any[] = []
+
+          const headerRows = table.querySelectorAll('thead tr')
+          const bodyRows = table.querySelectorAll('tbody tr')
+
+          for (const row of headerRows) {
+            const cells = row.querySelectorAll('th').map((cell) => decode(cell.text.trim()))
+            rows.push({_type: 'tableRow', cells, isHeader: true})
+          }
+
+          for (const row of bodyRows) {
+            const cells = row.querySelectorAll('td').map((cell) => decode(cell.text.trim()))
+            rows.push({_type: 'tableRow', cells})
+          }
+
+          blocks.push({_type: 'table', rows})
+          break
+        }
+
         const img = node.querySelector('img')
         const caption = decode(node.querySelector('figcaption')?.textContent || '').trim()
         if (img) {
@@ -208,6 +239,7 @@ export async function htmlToPortableText(html: string) {
             if (imageBlock) blocks.push({...imageBlock, caption})
           }
         }
+
         break
       }
 

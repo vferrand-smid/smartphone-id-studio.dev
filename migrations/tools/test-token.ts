@@ -2,10 +2,10 @@
 import {createClient} from '@sanity/client'
 
 const client = createClient({
-  projectId: 'uvnumxlz',
-  dataset: 'dev',
+  projectId: process.env.SANITY_PROJECT_ID!,
+  dataset: process.env.SANITY_DATASET!,
+  apiVersion: process.env.SANITY_API_VERSION!,
   token: process.env.SANITY_API_TOKEN,
-  apiVersion: '2023-10-10',
   useCdn: false,
 })
 

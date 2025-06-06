@@ -1,14 +1,13 @@
 import {createClient} from '@sanity/client'
 
-// IMPORTANT : même code que dans ton index.ts
-const TARGET_LOCALE = 'fr-CA'
+const TARGET_LOCALE = 'en-CA'
 
 const client = createClient({
-  projectId: 'uvnumxlz',
-  dataset: 'dev',
+  projectId: process.env.SANITY_PROJECT_ID!,
+  dataset: process.env.SANITY_DATASET!,
+  apiVersion: process.env.SANITY_API_VERSION!,
   token: process.env.SANITY_API_TOKEN,
   useCdn: false,
-  apiVersion: '2023-10-10',
 })
 
 async function deletePages() {
@@ -21,10 +20,14 @@ async function deletePages() {
     return
   }
 
-  console.log(`🚨 Suppression de ${ids.length} pages pour la locale "${TARGET_LOCALE}"...`)
+  const allIds = ids.flatMap((id: string) => [id, `drafts.${id}`])
+
+  console.log(
+    `🚨 Suppression de ${allIds.length} documents (avec drafts) pour la locale "${TARGET_LOCALE}"...`,
+  )
 
   const tx = client.transaction()
-  ids.forEach((id: string) => tx.delete(id))
+  allIds.forEach((id: string) => tx.delete(id))
 
   await tx.commit()
   console.log('✅ Suppression terminée.')

@@ -10,11 +10,11 @@ if (!LOCALE_TO_COUNT) {
 
 // 👉 Configure ton client Sanity
 const client = createClient({
-  projectId: 'uvnumxlz', // 🔁 remplace par le tien
-  dataset: 'dev', // 🔁 ou 'production' selon l'env
-  apiVersion: '2024-06-01',
+  projectId: process.env.SANITY_PROJECT_ID!,
+  dataset: process.env.SANITY_DATASET!,
+  apiVersion: process.env.SANITY_API_VERSION!,
   useCdn: false,
-  token: process.env.SANITY_API_TOKEN, // 🔐 facultatif mais utile si dataset privé
+  token: process.env.SANITY_API_TOKEN!,
 })
 
 async function countPages(locale: string) {
