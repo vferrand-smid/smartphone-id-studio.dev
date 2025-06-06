@@ -8,7 +8,7 @@ import './styles/global.css'
 
 export default defineConfig({
   name: 'default',
-  title: 'smartphone-id.test',
+  title: 'smartphone-id.dev',
 
   projectId: process.env.SANITY_STUDIO_PROJECT_ID!,
   dataset: process.env.SANITY_STUDIO_DATASET!,
