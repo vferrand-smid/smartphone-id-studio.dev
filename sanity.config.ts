@@ -10,8 +10,8 @@ export default defineConfig({
   name: 'default',
   title: 'smartphone-id.test',
 
-  projectId: '1t78evbt',
-  dataset: 'test',
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID!,
+  dataset: process.env.SANITY_STUDIO_DATASET!,
 
   plugins: [
     structureTool({structure}),

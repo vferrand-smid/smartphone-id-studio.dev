@@ -2,12 +2,15 @@
 
 import axios from 'axios'
 import {decode} from 'html-entities'
+import pLimit from 'p-limit'
 import {createOrReplace, defineMigration} from 'sanity/migrate'
 import {htmlToPortableText, loadImageCache, saveImageCache} from '../lib/htmlToPortableText'
 import {mapWpmlToSanityLocale} from '../lib/localeMapping'
 
 // Langue WordPress à importer
 const LANGUAGE_CODE = 'en_US'
+
+const limit = pLimit(5)
 
 // Mappage vers Sanity
 const SANITY_LOCALE = mapWpmlToSanityLocale(LANGUAGE_CODE)
@@ -19,7 +22,7 @@ export default defineMigration({
   async *migrate() {
     await loadImageCache()
 
-    const perPage = 100
+    const perPage = 10
     let page = 1
     let totalImported = 0
 
@@ -40,33 +43,36 @@ export default defineMigration({
         const pages = res.data
         if (!pages.length) break
 
-        const docsPromises = pages.map(async (pageItem: any) => {
-          try {
-            // console.log(
-            //   `💡 HTML reçu pour ${pageItem.slug}:\n`,
-            //   pageItem.content?.rendered?.includes('lwptoc') ? '✅ TOC détecté' : '❌ Pas de TOC',
-            // )
-
-            const parsedContent = await htmlToPortableText(pageItem.content?.rendered || '')
-
-            return createOrReplace({
-              _id: `page-${pageItem.slug || pageItem.id}-${LANGUAGE_CODE}`,
-              _type: 'page',
-              title: decode(pageItem.title?.rendered || 'Sans titre'),
-              slug: {_type: 'slug', current: pageItem.slug},
-              content: parsedContent.length
-                ? parsedContent
-                : [{_type: 'block', style: 'normal', children: [{_type: 'span', text: ''}]}],
-              date: pageItem.date,
-              modified: pageItem.modified,
-              status: pageItem.status ?? 'draft',
-              locale: SANITY_LOCALE,
-            })
-          } catch (error) {
-            console.error(`❌ Erreur page "${pageItem.slug}":`, error)
-            return null
-          }
-        })
+        const docsPromises = pages.map((pageItem: any) =>
+          limit(async () => {
+            try {
+              // const parsedContent = [
+              //   {
+              //     _type: 'block',
+              //     style: 'normal',
+              //     children: [{_type: 'span', text: '[Placeholder content]'}],
+              //   },
+              // ]
+              const parsedContent = await htmlToPortableText(pageItem.content?.rendered || '')
+              return createOrReplace({
+                _id: `page-${pageItem.slug || pageItem.id}-${SANITY_LOCALE}`,
+                _type: 'page',
+                title: decode(pageItem.title?.rendered || 'Sans titre'),
+                slug: {_type: 'slug', current: pageItem.slug},
+                content: parsedContent.length
+                  ? parsedContent
+                  : [{_type: 'block', style: 'normal', children: [{_type: 'span', text: ''}]}],
+                date: pageItem.date,
+                modified: pageItem.modified,
+                status: pageItem.status ?? 'draft',
+                locale: SANITY_LOCALE,
+              })
+            } catch (error) {
+              console.error(`❌ Erreur page "${pageItem.slug}":`, error)
+              return null
+            }
+          }),
+        )
 
         const docs = (await Promise.all(docsPromises)).filter(Boolean)
         if (docs.length > 0) {
@@ -77,11 +83,8 @@ export default defineMigration({
           // Vérifier s’il y a encore des pages à importer
           const totalPages = parseInt(res.headers['x-wp-totalpages'] || '1', 10)
           if (page >= totalPages) break
-
           page++
         }
-
-        page++
       }
 
       await saveImageCache()

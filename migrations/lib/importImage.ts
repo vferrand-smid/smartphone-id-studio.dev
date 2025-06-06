@@ -2,11 +2,11 @@ import {createClient} from '@sanity/client'
 import axios from 'axios'
 
 const client = createClient({
-  projectId: '1t78evbt', // ← remplace par ton vrai projectId
-  dataset: 'test', // ← ou 'production' si besoin
+  projectId: process.env.SANITY_PROJECT_ID!,
+  dataset: process.env.SANITY_DATASET!,
+  apiVersion: process.env.SANITY_API_VERSION!,
   token: process.env.SANITY_API_TOKEN,
   useCdn: false,
-  apiVersion: '2023-03-25',
 })
 
 export async function importImage(url: string): Promise<string> {

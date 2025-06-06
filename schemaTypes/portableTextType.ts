@@ -15,5 +15,6 @@ export default defineType({
     {type: 'videoEmbed'},
     {type: 'link'},
     {type: 'tableOfContents'},
+    {type: 'table'},
   ],
 })

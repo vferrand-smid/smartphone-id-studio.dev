@@ -51,3 +51,5 @@ export function mapWpmlToSanityLocale(wpmlCode?: string): string {
 
   return sanityLocale
 }
+
+export default wpmlToSanityLocaleMap

@@ -5528,8 +5528,8 @@ var Oe = {}
 const qe = je({
   name: 'default',
   title: 'smartphone-id.test',
-  projectId: '1t78evbt',
-  dataset: 'test',
+  projectId: process.env.SANITY_PROJECT_ID || '',
+  dataset: process.env.SANITY_DATASET || '',
   plugins: [
     Ne({structure: Ue}),
     Be(),
