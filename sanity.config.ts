@@ -1,3 +1,4 @@
+import {table} from '@sanity/table'
 import {visionTool} from '@sanity/vision'
 import {defineConfig, SchemaTypeDefinition} from 'sanity'
 import {presentationTool} from 'sanity/presentation'
@@ -14,6 +15,7 @@ export default defineConfig({
   dataset: process.env.SANITY_STUDIO_DATASET!,
 
   plugins: [
+    table(),
     structureTool({structure}),
     visionTool(),
     presentationTool({
