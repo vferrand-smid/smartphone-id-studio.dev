@@ -1,4 +1,3 @@
-import {table} from '@sanity/table'
 import {visionTool} from '@sanity/vision'
 import {defineConfig, SchemaTypeDefinition} from 'sanity'
 import {presentationTool} from 'sanity/presentation'
@@ -16,7 +15,25 @@ export default defineConfig({
   dataset: process.env.SANITY_STUDIO_DATASET!,
 
   plugins: [
-    table(),
+    // portableTable({
+    //   // Optional: default name is "table"
+    //   name: 'my-table',
+
+    //   // Optional: default title is "Table"
+    //   title: 'Portable Table',
+
+    //   // Required: must provide a block definition
+    //   cellSchema: {
+    //     name: 'my-block',
+    //     type: 'array',
+    //     styles: [],
+    //     lists: [],
+    //     marks: {
+    //       decorators: [{title: 'Strong', value: 'strong'}],
+    //       annotations: [],
+    //     },
+    //   },
+    // }),
     structureTool({structure}),
     visionTool(),
     presentationTool({
