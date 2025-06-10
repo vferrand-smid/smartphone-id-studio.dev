@@ -1,7 +1,6 @@
 const wpmlToSanityLocaleMap: Record<string, string> = {
-  ar: 'ar-SA',
+  ar: 'ar-AE',
   ar_SA: 'ar-SA',
-  ar_AE: 'ar-AE',
   de: 'de-DE',
   et: 'et-EE',
   qu: 'de-CH',

@@ -2,7 +2,7 @@ import {defineType} from 'sanity'
 
 export const tableCustom = defineType({
   name: 'tableCustom',
-  title: 'Tableau enrichi',
+  title: 'Tableau',
   type: 'object',
   fields: [
     {
