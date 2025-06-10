@@ -8,10 +8,9 @@ import {htmlToPortableText, loadImageCache, saveImageCache} from '../lib/htmlToP
 import {mapWpmlToSanityLocale} from '../lib/localeMapping'
 
 // Langue WordPress à importer
-const LANGUAGE_CODE = 'en_CA'
+const LANGUAGE_CODE = 'pt-pt'
 
 const limit = pLimit(5)
-
 // Mappage vers Sanity
 const SANITY_LOCALE = mapWpmlToSanityLocale(LANGUAGE_CODE)
 if (!SANITY_LOCALE) throw new Error(`❌ Locale WP "${LANGUAGE_CODE}" inconnue dans le mapping.`)

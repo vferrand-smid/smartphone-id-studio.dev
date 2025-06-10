@@ -98,6 +98,26 @@ function parseSpansRich(node: HTMLElement): any[] {
   return spans
 }
 
+function extractMarkDefsFromSpans(spans: any[]): any[] {
+  const markDefs: any[] = []
+
+  spans.forEach((span) => {
+    if (span.marks) {
+      span.marks.forEach((mark: string) => {
+        if (mark.startsWith('link-') && !markDefs.find((m) => m._key === mark)) {
+          markDefs.push({
+            _type: 'link',
+            _key: mark,
+            href: mark.replace(/^link-/, ''),
+          })
+        }
+      })
+    }
+  })
+
+  return markDefs
+}
+
 export async function htmlToPortableText(html: string) {
   if (!html) return []
 
@@ -180,8 +200,10 @@ export async function htmlToPortableText(html: string) {
       case 'H5':
       case 'H6': {
         const children = parseSpansRich(node)
+        const markDefs = extractMarkDefsFromSpans(children)
+
         if (children.length > 0) {
-          blocks.push({_type: 'block', style: node.tagName.toLowerCase(), children})
+          blocks.push({_type: 'block', style: node.tagName.toLowerCase(), children, markDefs})
         }
         break
       }
@@ -190,20 +212,17 @@ export async function htmlToPortableText(html: string) {
       case 'OL': {
         const isOrdered = node.tagName === 'OL'
         node.querySelectorAll(':scope > li').forEach((li) => {
-          const link = li.querySelector('a')
-          const text = decode(link?.textContent || li.textContent || '').trim()
-          const href = link?.getAttribute('href')
-          const markKey = href ? `link-${href}` : undefined
-
-          const block: any = {
-            _type: 'block',
-            style: 'normal',
-            listItem: isOrdered ? 'number' : 'bullet',
-            children: [{_type: 'span', text, marks: href ? [markKey] : []}],
-            markDefs: href ? [{_type: 'link', _key: markKey, href}] : [],
+          const children = parseSpansRich(li)
+          const markDefs = extractMarkDefsFromSpans(children)
+          if (children.length > 0) {
+            blocks.push({
+              _type: 'block',
+              style: 'normal',
+              listItem: isOrdered ? 'number' : 'bullet',
+              children,
+              markDefs,
+            })
           }
-
-          blocks.push(block)
         })
         break
       }

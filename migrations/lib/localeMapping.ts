@@ -30,7 +30,7 @@ const wpmlToSanityLocaleMap: Record<string, string> = {
   nl: 'nl-NL',
   pl: 'pl-PL',
   'pt-br': 'pt-BR',
-  pt_PT: 'pt-PT',
+  'pt-pt': 'pt-PT',
   ru: 'ru-RU',
   sv: 'sv-SE',
   'zh-hans': 'zh-CN',
