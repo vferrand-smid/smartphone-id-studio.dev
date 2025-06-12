@@ -64,7 +64,14 @@ export const structure = async (S: StructureBuilder) => {
       filter: '_type == "page" && status == "trash" && !(_id in path("drafts.**"))',
     },
   ].map(({label, filter}) =>
-    S.listItem().title(label).child(S.documentList().title(label).filter(filter)),
+    S.listItem()
+      .title(label)
+      .child(
+        S.documentList()
+          .title(label)
+          .filter(filter)
+          .defaultOrdering([{field: 'title', direction: 'asc'}]),
+      ),
   )
 
   // ➕ Pages sans locale
@@ -77,6 +84,7 @@ export const structure = async (S: StructureBuilder) => {
     .child(
       S.documentList()
         .title('Pages sans locale')
+        .defaultOrdering([{field: 'title', direction: 'asc'}])
         .filter(
           '_type == "page" && (!defined(locale) || locale == null || locale == "" || locale == "und")',
         ),
@@ -89,18 +97,16 @@ export const structure = async (S: StructureBuilder) => {
         locale,
       })
 
-      return (
-        S.listItem()
-          .title(`${flagEmojiFromLocale(locale)} Pages (${locale} – ${count})`)
-          //.title(`Pages (${locale} – ${count})`)
-          .child(
-            S.documentList()
-              .title(`Pages – ${locale}`)
-              .filter('_type == "page" && locale == $locale')
-              .params({locale})
-              .menuItems(S.documentTypeList('page').getMenuItems()),
-          )
-      )
+      return S.listItem()
+        .title(`${flagEmojiFromLocale(locale)} Pages (${locale} – ${count})`)
+        .child(
+          S.documentList()
+            .title(`Pages – ${locale}`)
+            .filter('_type == "page" && locale == $locale')
+            .params({locale})
+            .defaultOrdering([{field: 'title', direction: 'asc'}])
+            .menuItems(S.documentTypeList('page').getMenuItems()),
+        )
     }),
   )
 
@@ -122,6 +128,12 @@ export const structure = async (S: StructureBuilder) => {
 
       S.divider(),
 
-      S.documentTypeListItem('author').title('Auteurs 🧑‍💻'),
+      S.listItem()
+        .title('Auteurs 🧑‍💻')
+        .child(
+          S.documentTypeList('author')
+            .title('Auteurs')
+            .defaultOrdering([{field: 'name', direction: 'asc'}]),
+        ),
     ])
 }

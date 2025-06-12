@@ -1,7 +1,6 @@
 // SCRIPT POUR IMPORTER LES PAGES DE WP AVEC L'API REST
 
 import axios from 'axios'
-import crypto from 'crypto'
 import {decode} from 'html-entities'
 import pLimit from 'p-limit'
 import {createOrReplace, defineMigration} from 'sanity/migrate'
@@ -9,16 +8,16 @@ import {htmlToPortableText, loadImageCache, saveImageCache} from '../lib/htmlToP
 import {mapWpmlToSanityLocale} from '../lib/localeMapping'
 
 // Langue WordPress à importer
-const LANGUAGE_CODE = 'ar'
+const LANGUAGE_CODE = 'it'
 
 const limit = pLimit(5)
 // Mappage vers Sanity
 const SANITY_LOCALE = mapWpmlToSanityLocale(LANGUAGE_CODE)
 if (!SANITY_LOCALE) throw new Error(`❌ Locale WP "${LANGUAGE_CODE}" inconnue dans le mapping.`)
 
-function hashId(slug: string, locale: string) {
-  return crypto.createHash('sha1').update(`${slug}-${locale}`).digest('hex')
-}
+// function hashId(slug: string, locale: string) {
+//   return crypto.createHash('sha1').update(`${slug}-${locale}`).digest('hex')
+// }
 
 // function cleanSlug(slug: string): string {
 //   try {
@@ -75,9 +74,9 @@ export default defineMigration({
               const parsedContent = await htmlToPortableText(pageItem.content?.rendered || '')
               const slug = decodeURIComponent(pageItem.slug || pageItem.id.toString())
               return createOrReplace({
-                _id: `page-${hashId(slug, SANITY_LOCALE)}`,
+                //_id: `page-${hashId(slug, SANITY_LOCALE)}`,
                 //_id: safeSanityId(pageItem.slug || pageItem.id.toString(), SANITY_LOCALE),
-                //_id: `page-${pageItem.slug || pageItem.id}-${SANITY_LOCALE}`,
+                _id: `page-${pageItem.slug || pageItem.id}-${SANITY_LOCALE}`,
                 _type: 'page',
                 title: decode(pageItem.title?.rendered || 'Sans titre'),
                 slug: {
