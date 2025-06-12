@@ -15,25 +15,6 @@ export default defineConfig({
   dataset: process.env.SANITY_STUDIO_DATASET!,
 
   plugins: [
-    // portableTable({
-    //   // Optional: default name is "table"
-    //   name: 'my-table',
-
-    //   // Optional: default title is "Table"
-    //   title: 'Portable Table',
-
-    //   // Required: must provide a block definition
-    //   cellSchema: {
-    //     name: 'my-block',
-    //     type: 'array',
-    //     styles: [],
-    //     lists: [],
-    //     marks: {
-    //       decorators: [{title: 'Strong', value: 'strong'}],
-    //       annotations: [],
-    //     },
-    //   },
-    // }),
     structureTool({structure}),
     visionTool(),
     presentationTool({
@@ -49,9 +30,5 @@ export default defineConfig({
   schema: {
     types: schemaTypes as SchemaTypeDefinition[],
   },
-  studio: {
-    // components: {
-    //   layout: DisableAnimations,
-    // },
-  },
+  studio: {},
 })
