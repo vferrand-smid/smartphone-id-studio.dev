@@ -675,31 +675,11 @@
             },
             {
               "type": "string",
-              "value": "future"
-            },
-            {
-              "type": "string",
               "value": "draft"
             },
             {
               "type": "string",
-              "value": "pending"
-            },
-            {
-              "type": "string",
-              "value": "private"
-            },
-            {
-              "type": "string",
               "value": "trash"
-            },
-            {
-              "type": "string",
-              "value": "auto-draft"
-            },
-            {
-              "type": "string",
-              "value": "inherit"
             }
           ]
         },

@@ -23,15 +23,9 @@ export const structure = async (S: StructureBuilder) => {
 
   // ➕ Compter les pages par statut
   const [countPublished, countDraft, countTrash, countUndefined] = await Promise.all([
-    client.fetch<number>(
-      'count(*[_type == "page" && status == "publish" && !(_id in path("drafts.**"))])',
-    ),
-    client.fetch<number>(
-      'count(*[_type == "page" && status == "draft" && !(_id in path("drafts.**"))])',
-    ),
-    client.fetch<number>(
-      'count(*[_type == "page" && status == "trash" && !(_id in path("drafts.**"))])',
-    ),
+    client.fetch<number>('count(*[_type == "page" && status == "publish"])'),
+    client.fetch<number>('count(*[_type == "page" && status == "draft"])'),
+    client.fetch<number>('count(*[_type == "page" && status == "trash"])'),
     client.fetch<number>(
       `count(*[
     _type == "page" &&
@@ -48,20 +42,19 @@ export const structure = async (S: StructureBuilder) => {
   const statusItems = [
     {
       label: `🟢 Publiées (${countPublished})`,
-      filter: '_type == "page" && status == "publish" && !(_id in path("drafts.**"))',
+      filter: '_type == "page" && status == "publish"',
     },
     {
       label: `📝 Brouillons (${countDraft})`,
-      filter: '_type == "page" && status == "draft" && !(_id in path("drafts.**"))',
+      filter: '_type == "page" && status == "draft"',
     },
     {
       label: `❓ Sans statut (${countUndefined})`,
-      filter:
-        '_type == "page" && (!defined(status) || status == null) && !(_id in path("drafts.**"))',
+      filter: '_type == "page" && (!defined(status) || status == null)',
     },
     {
       label: `🗑️ Corbeille (${countTrash})`,
-      filter: '_type == "page" && status == "trash" && !(_id in path("drafts.**"))',
+      filter: '_type == "page" && status == "trash"',
     },
   ].map(({label, filter}) =>
     S.listItem()

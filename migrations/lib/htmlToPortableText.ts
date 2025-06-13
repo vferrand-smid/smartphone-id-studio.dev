@@ -118,7 +118,15 @@ function extractMarkDefsFromSpans(spans: any[]): any[] {
   return markDefs
 }
 
-export async function htmlToPortableText(html: string) {
+const TOC_TITLES: Record<string, string> = {
+  'fr-FR': 'Table des matières',
+  'en-US': 'Table of contents',
+  'es-AR': 'Tabla de contenidos',
+  'de-DE': 'Inhaltsverzeichnis',
+  // Ajoute d’autres locales au besoin
+}
+
+export async function htmlToPortableText(html: string, locale: string) {
   if (!html) return []
 
   const root = parse(html)
@@ -169,7 +177,7 @@ export async function htmlToPortableText(html: string) {
         children: [
           {
             _type: 'span',
-            text: 'Table des matières',
+            text: TOC_TITLES[locale] || 'Table des matières',
             marks: [],
           },
         ],

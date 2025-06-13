@@ -15,6 +15,7 @@ const limit = pLimit(5)
 const SANITY_LOCALE = mapWpmlToSanityLocale(LANGUAGE_CODE)
 if (!SANITY_LOCALE) throw new Error(`❌ Locale WP "${LANGUAGE_CODE}" inconnue dans le mapping.`)
 
+// ‼️ POUR LES LANGUES ARABES
 // function hashId(slug: string, locale: string) {
 //   return crypto.createHash('sha1').update(`${slug}-${locale}`).digest('hex')
 // }
@@ -71,9 +72,13 @@ export default defineMigration({
               //     children: [{_type: 'span', text: '[Placeholder content]'}],
               //   },
               // ]
-              const parsedContent = await htmlToPortableText(pageItem.content?.rendered || '')
+              const parsedContent = await htmlToPortableText(
+                pageItem.content?.rendered || '',
+                SANITY_LOCALE,
+              )
               const slug = decodeURIComponent(pageItem.slug || pageItem.id.toString())
               return createOrReplace({
+                // ‼️ POUR LES LANGUES ARABES
                 //_id: `page-${hashId(slug, SANITY_LOCALE)}`,
                 //_id: safeSanityId(pageItem.slug || pageItem.id.toString(), SANITY_LOCALE),
                 _id: `page-${pageItem.slug || pageItem.id}-${SANITY_LOCALE}`,
