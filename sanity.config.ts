@@ -10,7 +10,6 @@ import './styles/global.css'
 export default defineConfig({
   name: 'default',
   title: 'smartphone-id.test',
-
   projectId: process.env.SANITY_STUDIO_PROJECT_ID!,
   dataset: process.env.SANITY_STUDIO_DATASET!,
 
@@ -19,8 +18,7 @@ export default defineConfig({
     visionTool(),
     presentationTool({
       previewUrl: {
-        origin: process.env.SANITY_API_TOKEN,
-        preview: '/',
+        origin: process.env.SANITY_PREVIEW_URL!,
         previewMode: {
           enable: '/api/draft-mode/enable',
         },

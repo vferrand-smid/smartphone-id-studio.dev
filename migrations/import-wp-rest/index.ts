@@ -9,14 +9,14 @@ import {mapWpmlToSanityLocale} from '../lib/localeMapping'
 
 // Langue WordPress à importer
 
-const LANGUAGE_CODE = 'it'
+const LANGUAGE_CODE = 'qu'
 
 const limit = pLimit(5)
 // Mappage vers Sanity
 const SANITY_LOCALE = mapWpmlToSanityLocale(LANGUAGE_CODE)
 if (!SANITY_LOCALE) throw new Error(`❌ Locale WP "${LANGUAGE_CODE}" inconnue dans le mapping.`)
 
-// ‼️ POUR LES LANGUES ARABES
+// ‼️ POUR LES LANGUES ARABES / CHINOIS
 // function hashId(slug: string, locale: string) {
 //   return crypto.createHash('sha1').update(`${slug}-${locale}`).digest('hex')
 // }
@@ -66,34 +66,27 @@ export default defineMigration({
         const docsPromises = pages.map((pageItem: any) =>
           limit(async () => {
             try {
-              // const parsedContent = [
-              //   {
-              //     _type: 'block',
-              //     style: 'normal',
-              //     children: [{_type: 'span', text: '[Placeholder content]'}],
-              //   },
-              // ]
               const parsedContent = await htmlToPortableText(
                 pageItem.content?.rendered || '',
                 SANITY_LOCALE,
               )
-              const slug = decodeURIComponent(pageItem.slug || pageItem.id.toString())
+              //const slug = decodeURIComponent(pageItem.slug || pageItem.id.toString())
               return createOrReplace({
-                // ‼️ POUR LES LANGUES ARABES
+                // ‼️ POUR LES LANGUES ARABES / CHINOIS
                 //_id: `page-${hashId(slug, SANITY_LOCALE)}`,
                 //_id: safeSanityId(pageItem.slug || pageItem.id.toString(), SANITY_LOCALE),
                 _id: `page-${pageItem.slug || pageItem.id}-${SANITY_LOCALE}`,
                 _type: 'page',
                 title: decode(pageItem.title?.rendered || 'Sans titre'),
-                slug: {
-                  _type: 'slug',
-                  current: slug, // ← en arabe ou n’importe quoi de lisible
-                },
+                // slug: {
+                //   _type: 'slug',
+                //   current: slug, // ← en arabe ou n’importe quoi de lisible
+                // },
                 // slug: {
                 //   _type: 'slug',
                 //   current: cleanSlug(pageItem.slug || pageItem.title?.rendered || ''),
                 // },
-                //slug: {_type: 'slug', current: pageItem.slug || pageItem.id.toString()},
+                slug: {_type: 'slug', current: pageItem.slug || pageItem.id.toString()},
                 content: parsedContent.length
                   ? parsedContent
                   : [{_type: 'block', style: 'normal', children: [{_type: 'span', text: ''}]}],

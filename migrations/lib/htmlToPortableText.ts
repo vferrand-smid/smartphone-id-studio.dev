@@ -42,27 +42,57 @@ async function uploadImageToSanity(url: string) {
       const buffer = Buffer.from(response.data)
       const hash = hashBuffer(buffer)
 
+      // 🚫 Vérifie si image déjà en cache
       if (imageCache.has(hash)) {
+        const cachedId = imageCache.get(hash)!
+        console.log(`♻️ Image déjà en cache : ${url} → ${cachedId}`)
         return {
           _type: 'image',
-          asset: {_type: 'reference', _ref: imageCache.get(hash)!},
+          asset: {_type: 'reference', _ref: cachedId},
         }
       }
 
-      // Lenteur volontaire seulement pour test réseau ou API
-      // await new Promise((r) => setTimeout(r, 15000))
+      // 🚫 Filtre les images trop volumineuses (> 5 Mo ici)
+      if (buffer.byteLength > 5_000_000) {
+        console.warn(
+          `⚠️ Image ignorée (trop lourde : ${(buffer.byteLength / 1_000_000).toFixed(2)} Mo) → ${url}`,
+        )
+        return null
+      }
 
+      if (hash === '6829b0200d23c81415620cabe35eea193ca6f585') {
+        console.warn('🧨 Forçage de réimport : image cassée dans le cache')
+        imageCache.delete(hash) // ← efface du cache pour forcer le réupload
+      }
+
+      // ✅ Upload dans Sanity
       const asset = await sanityClient.assets.upload('image', buffer, {
         filename: url.split('/').pop(),
       })
 
+      console.log(`✅ Image uploadée : ${url} → ${asset._id}`)
+
+      const sanityAssetId = asset._id
+      imageCache.set(hash, sanityAssetId)
+
+      let attempts = 0
+      while (attempts < 5) {
+        const exists = await sanityClient.fetch(`count(*[_id == $id])`, {id: sanityAssetId})
+        if (exists > 0) break
+        console.log(`🕒 Attente de l'indexation de l'image ${sanityAssetId} (${attempts + 1}/5)`)
+        await new Promise((r) => setTimeout(r, 1000))
+        attempts++
+      }
+
+      // 🧠 Stocke dans le cache
       imageCache.set(hash, asset._id)
+
       return {
         _type: 'image',
         asset: {_type: 'reference', _ref: asset._id},
       }
-    } catch (err) {
-      console.warn(`❌ Image non importée depuis ${url}: ${err}`)
+    } catch (err: any) {
+      console.warn(`❌ Échec d'import image depuis ${url}: ${err?.message || err}`)
       return null
     }
   })
