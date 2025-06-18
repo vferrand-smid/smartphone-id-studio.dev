@@ -12,7 +12,6 @@ const wpmlToSanityLocaleMap: Record<string, string> = {
   en_CA: 'en-CA',
   en_GB: 'en-GB',
   en_IE: 'en-IE',
-  en_IN: 'en-IN',
   en_NZ: 'en-NZ',
   en_US: 'en-US',
   en_ZA: 'en-ZA',

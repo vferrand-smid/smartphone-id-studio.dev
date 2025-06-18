@@ -19,7 +19,7 @@ function hashBuffer(buffer: Buffer): string {
 }
 
 const imageCachePath = './.sanityImageCache.json'
-const limit = pLimit(1)
+const limit = pLimit(5)
 let imageCache: Map<string, string> = new Map()
 
 export async function loadImageCache() {
@@ -38,7 +38,16 @@ export async function saveImageCache() {
 async function uploadImageToSanity(url: string) {
   return limit(async () => {
     try {
-      const response = await axios.get(url, {responseType: 'arraybuffer'})
+      const response = await axios.get(url, {
+        responseType: 'arraybuffer',
+        validateStatus: (status) => status < 400, // important pour throw en 404
+      })
+
+      if (response.status !== 200) {
+        console.warn(`⛔ Image ignorée (status ${response.status}) → ${url}`)
+        return null
+      }
+
       const buffer = Buffer.from(response.data)
       const hash = hashBuffer(buffer)
 
@@ -49,20 +58,28 @@ async function uploadImageToSanity(url: string) {
         }
       }
 
-      // Lenteur volontaire seulement pour test réseau ou API
-      // await new Promise((r) => setTimeout(r, 15000))
-
       const asset = await sanityClient.assets.upload('image', buffer, {
         filename: url.split('/').pop(),
       })
 
+      // Vérifie qu'elle est bien dispo dans Sanity
+      const refCheck = await sanityClient.fetch(`*[_id == $id][0]._id`, {
+        id: asset._id,
+      })
+
+      if (!refCheck) {
+        console.warn(`⛔ Image non encore dispo dans dataset : ${asset._id}`)
+        return null
+      }
+
       imageCache.set(hash, asset._id)
+
       return {
         _type: 'image',
         asset: {_type: 'reference', _ref: asset._id},
       }
-    } catch (err) {
-      console.warn(`❌ Image non importée depuis ${url}: ${err}`)
+    } catch (err: any) {
+      console.warn(`❌ Erreur lors de l'import image ${url} : ${err.message}`)
       return null
     }
   })
@@ -123,7 +140,7 @@ const TOC_TITLES: Record<string, string> = {
   'en-US': 'Table of contents',
   'es-AR': 'Tabla de contenidos',
   'de-DE': 'Inhaltsverzeichnis',
-  // Ajoute d’autres locales au besoin
+  // Ajoute d'autres locales au besoin
 }
 
 export async function htmlToPortableText(html: string, locale: string) {
@@ -142,7 +159,7 @@ export async function htmlToPortableText(html: string, locale: string) {
   for (const heading of headings) {
     const text = decode(heading.textContent || '').trim()
 
-    // Marque d’entrée dans la FAQ
+    // Marque d'entrée dans la FAQ
     if (heading.tagName === 'H2' && /faq/i.test(text)) {
       inFAQ = true
       continue
@@ -254,19 +271,25 @@ export async function htmlToPortableText(html: string, locale: string) {
           }
 
           blocks.push({_type: 'table', rows})
-          break
-        }
-
-        const img = node.querySelector('img')
-        const caption = decode(node.querySelector('figcaption')?.textContent || '').trim()
-        if (img) {
-          const src = img.getAttribute('src')
-          if (src) {
-            const imageBlock = await uploadImageToSanity(src)
-            if (imageBlock) blocks.push({...imageBlock, caption})
+        } else {
+          const img = node.querySelector('img')
+          const caption = decode(node.querySelector('figcaption')?.textContent || '').trim()
+          if (img) {
+            const src = img.getAttribute('src')
+            if (src) {
+              const imageBlock = await uploadImageToSanity(src)
+              if (imageBlock) {
+                blocks.push({
+                  _type: 'image',
+                  asset: imageBlock.asset,
+                  caption,
+                })
+              } else {
+                console.warn(`⛔ Image ignorée car inaccessible : ${src}`)
+              }
+            }
           }
         }
-
         break
       }
 
@@ -274,7 +297,11 @@ export async function htmlToPortableText(html: string, locale: string) {
         const src = node.getAttribute('src')
         if (src) {
           const imageBlock = await uploadImageToSanity(src)
-          if (imageBlock) blocks.push(imageBlock)
+          if (imageBlock) {
+            blocks.push(imageBlock)
+          } else {
+            console.warn(`⛔ Image IMG ignorée car inaccessible : ${src}`)
+          }
         }
         break
       }
