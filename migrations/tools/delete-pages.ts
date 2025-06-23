@@ -1,6 +1,6 @@
 import {createClient} from '@sanity/client'
 
-const TARGET_LOCALE = 'zh-CN'
+const TARGET_LOCALE = 'nl-BE'
 
 const client = createClient({
   projectId: process.env.SANITY_PROJECT_ID!,

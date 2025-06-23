@@ -9,7 +9,7 @@ import {htmlToPortableText, loadImageCache, saveImageCache} from '../lib/htmlToP
 import {mapWpmlToSanityLocale} from '../lib/localeMapping'
 
 // Langue WordPress à importer
-const LANGUAGE_CODE = 'zh-hans'
+const LANGUAGE_CODE = 'eo'
 
 const limit = pLimit(5)
 // Mappage vers Sanity
