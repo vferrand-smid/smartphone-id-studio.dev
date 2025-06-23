@@ -3,7 +3,6 @@ const wpmlToSanityLocaleMap: Record<string, string> = {
   ar_SA: 'ar-SA',
   de: 'de-DE',
   et: 'et-EE',
-
   qu: 'de-CH',
   en: 'en',
   sq: 'en-NG',
@@ -30,9 +29,7 @@ const wpmlToSanityLocaleMap: Record<string, string> = {
   nl: 'nl-NL',
   pl: 'pl-PL',
   'pt-br': 'pt-BR',
-
   'pt-pt': 'pt-PT',
-
   ru: 'ru-RU',
   sv: 'sv-SE',
   'zh-hans': 'zh-CN',

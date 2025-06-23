@@ -9,7 +9,7 @@ import {mapWpmlToSanityLocale} from '../lib/localeMapping'
 
 // Langue WordPress à importer
 
-const LANGUAGE_CODE = 'qu'
+const LANGUAGE_CODE = 'en'
 
 const limit = pLimit(5)
 // Mappage vers Sanity
