@@ -60,7 +60,6 @@ export const pageType = defineType({
           {title: 'Chinese (China) 🇨🇳', value: 'zh-CN'},
           {title: 'Deutsch', value: 'de'},
           {title: 'Deutsch (Germany) 🇩🇪', value: 'de-DE'},
-          {title: 'Deutsch (Netherlands) 🇳🇱', value: 'de-NL'},
           {title: 'Deutsch (Switzerland) 🇨🇭', value: 'de-CH'},
           {title: 'English', value: 'en'},
           {title: 'English (Australia) 🇦🇺', value: 'en-AU'},
