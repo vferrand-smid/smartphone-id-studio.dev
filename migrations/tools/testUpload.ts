@@ -2,9 +2,9 @@ import {createClient} from '@sanity/client'
 import axios from 'axios'
 
 const sanityClient = createClient({
-  projectId: 'uvnumxlz',
-  dataset: 'dev',
-  apiVersion: '2024-06-17',
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID,
+  dataset: process.env.SANITY_STUDIO_DATASET,
+  apiVersion: process.env.SANITY_STUDIO_API_VERSION,
   token: process.env.SANITY_API_TOKEN,
   useCdn: false,
 })

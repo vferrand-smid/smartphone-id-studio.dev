@@ -8,8 +8,8 @@ import {structure} from './structure'
 import './styles/global.css'
 
 export default defineConfig({
-  name: 'default',
-  title: 'smartphone-id.test',
+  name: process.env.SANITY_TITLE,
+  title: process.env.SANITY_TITLE,
   projectId: process.env.SANITY_STUDIO_PROJECT_ID!,
   dataset: process.env.SANITY_STUDIO_DATASET!,
 

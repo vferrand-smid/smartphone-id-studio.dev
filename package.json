@@ -7,6 +7,9 @@
   "license": "UNLICENSED",
   "scripts": {
     "dev": "sanity dev",
+    "dev:prod": "cp .env.production .env.local && npm run dev",
+    "dev:dev": "cp .env.development .env.local && npm run dev",
+    "dev:local": "cp .env.local .env.local && npm run dev",
     "start": "sanity start",
     "build": "sanity build",
     "deploy": "sanity deploy",
@@ -59,6 +62,7 @@
     "@types/react": "^18.0.25",
     "@wordpress/block-serialization-default-parser": "^5.22.0",
     "dotenv-cli": "^8.0.0",
+    "env-cmd": "^10.1.0",
     "eslint": "^9.9.0",
     "html-entities": "^2.6.0",
     "jsdom": "^26.1.0",

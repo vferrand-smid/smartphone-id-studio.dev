@@ -7,8 +7,8 @@ import {fileURLToPath} from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const projectId = '1t78evbt' // Ton nouveau projet
-const dataset = 'test'
+const projectId = process.env.SANITY_PROJECT_ID // Ton nouveau projet
+const dataset = process.env.SANITY_STUDIO_DATASET
 const token = process.env.SANITY_API_TOKEN // définit dans ton .env
 
 const imageUrls = [
