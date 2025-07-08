@@ -9,7 +9,6 @@ const __dirname = path.dirname(__filename)
 
 const projectId = process.env.SANITY_PROJECT_ID // Ton nouveau projet
 const dataset = process.env.SANITY_STUDIO_DATASET
-const token = process.env.SANITY_API_TOKEN // définit dans ton .env
 
 const imageUrls = [
   'https://www.smartphone-id.com/wp-content/uploads/2024/10/visa-resident-temporaire-2025-1024x569.png',
@@ -46,7 +45,7 @@ const imageUrls = [
 ]
 
 const imageCachePath = path.resolve(__dirname, 'imageCache.json')
-const client = createClient({projectId, dataset, token, useCdn: false, apiVersion: '2024-06-01'})
+const client = createClient({projectId, dataset, useCdn: false, apiVersion: '2024-06-01'})
 
 const imageCache: Record<string, string> = {}
 
