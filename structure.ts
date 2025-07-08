@@ -1,8 +1,7 @@
 import {createClient} from '@sanity/client'
-import {Iframe} from 'sanity-plugin-iframe-pane'
 import {StructureBuilder} from 'sanity/structure'
+import IframePreview from './IframePreview'
 import {getLocales} from './migrations/lib/getLocales'
-import {resolvePreviewUrl} from './resolvePreviewUrl'
 
 const client = createClient({
   projectId: process.env.SANITY_STUDIO_PROJECT_ID!,
@@ -104,27 +103,7 @@ export const structure = async (S: StructureBuilder) => {
               return S.document()
                 .documentId(documentId)
                 .schemaType('page')
-                .views([
-                  S.view.form(),
-                  S.view
-                    .component(Iframe)
-                    .options({
-                      url: async () => {
-                        const doc = await client.fetch(`*[_id == $id][0]{slug, locale}`, {
-                          id: documentId,
-                        })
-
-                        console.log('[Preview URL] fetched doc:', doc)
-
-                        return resolvePreviewUrl(doc)
-                      },
-                      reload: {
-                        button: true,
-                        revision: true, // ← c’est ça qui écoute les changements
-                      },
-                    })
-                    .title('Preview'),
-                ])
+                .views([S.view.form(), S.view.component(IframePreview).title('Preview')])
             }),
         )
     }),
