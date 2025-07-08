@@ -1,5 +1,6 @@
 import {createClient} from '@sanity/client'
 import {StructureBuilder} from 'sanity/structure'
+import IframePreview from './IframePreview'
 import {getLocales} from './migrations/lib/getLocales'
 
 const client = createClient({
@@ -98,7 +99,12 @@ export const structure = async (S: StructureBuilder) => {
             .filter('_type == "page" && locale == $locale')
             .params({locale})
             .defaultOrdering([{field: 'title', direction: 'asc'}])
-            .menuItems(S.documentTypeList('page').getMenuItems()),
+            .child((documentId) => {
+              return S.document()
+                .documentId(documentId)
+                .schemaType('page')
+                .views([S.view.form(), S.view.component(IframePreview).title('Preview')])
+            }),
         )
     }),
   )

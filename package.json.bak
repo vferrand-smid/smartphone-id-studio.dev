@@ -1,5 +1,5 @@
 {
-  "name": "smartphone-id-dev",
+  "name": "smartphone-id.test",
   "private": true,
   "version": "1.0.0",
   "main": "package.json",
@@ -12,7 +12,7 @@
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
     "build:migrations": "tsc --build tsconfig.migrations.json",
-    "migrate:pages": "sanity migration run import-wp-graphql --dataset dev --project uvnumxlz --no-dry-run",
+    "migrate:pages": "sanity migration run import-wp-graphql --dataset dev --project 1t78evbt --no-dry-run",
     "count-pages": "tsx migrations/count-pages/index.ts",
     "delete-pages": "dotenv -e .env -- tsx migrations/tools/delete-pages.ts"
   },
