@@ -7,9 +7,9 @@
   "license": "UNLICENSED",
   "scripts": {
     "dev": "sanity dev",
-    "dev:prod": "cp .env.production .env.local && npm run dev",
-    "dev:dev": "cp .env.development .env.local && npm run dev",
-    "dev:local": "cp .env.local .env.local && npm run dev",
+    "dev:prod": "dotenv -e .env.production sanity dev",
+    "dev:dev": "dotenv -e .env.development sanity dev",
+    "dev:local": "dotenv -e .env.local sanity dev",
     "start": "sanity start",
     "build": "sanity build",
     "deploy": "sanity deploy",

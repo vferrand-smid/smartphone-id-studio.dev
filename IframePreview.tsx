@@ -3,13 +3,16 @@ export default function IframePreview(props: any) {
   if (!doc?.slug?.current || !doc?.locale) {
     return <div style={{padding: 32}}>Pas de slug ou de locale…</div>
   }
-  const params = new URLSearchParams({
-    locale: doc.locale,
-    slug: doc.slug.current,
-    type: doc._type,
-    rev: doc._rev || '',
-  }).toString()
-  const url = `${process.env.PREVIEW_FRONT_URL || 'http://localhost:3000'}/api/preview?${params}`
+  // const params = new URLSearchParams({
+  //   locale: doc.locale,
+  //   slug: doc.slug.current,
+  //   type: doc._type,
+  //   rev: doc._rev || '',
+  // }).toString()
+  //const url = `${process.env.PREVIEW_FRONT_URL}/api/preview?${params}`
+  const previewFrontUrl = process.env.SANITY_STUDIO_PREVIEW_FRONT_URL
+  console.log('SANITY_STUDIO_PREVIEW_FRONT_URL :', previewFrontUrl)
+  const url = `${previewFrontUrl}/api/preview?locale=${doc.locale}&type=blog&slug=${doc.slug.current}`
   return (
     <div style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
       <div style={{margin: '16px 8px'}}>
