@@ -1,11 +1,18 @@
 import {createClient} from '@sanity/client'
+import {config as tokensConfig} from 'dotenv'
+tokensConfig({path: '.env.tokens'})
 
-const TARGET_LOCALE = 'nl-BE'
+console.log('SANITY_PROJECT_ID', process.env.SANITY_PROJECT_ID)
+console.log('SANITY_DATASET', process.env.SANITY_DATASET)
+console.log('SANITY_API_VERSION', process.env.SANITY_API_VERSION)
+
+const TARGET_LOCALE = 'und'
 
 const client = createClient({
   projectId: process.env.SANITY_PROJECT_ID!,
   dataset: process.env.SANITY_DATASET!,
   apiVersion: process.env.SANITY_API_VERSION!,
+  token: process.env.SANITY_API_TOKEN!,
   useCdn: false,
 })
 

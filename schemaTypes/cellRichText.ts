@@ -13,6 +13,7 @@ export const cellRichText = defineType({
         decorators: [
           {title: 'Gras', value: 'strong'},
           {title: 'Italique', value: 'em'},
+          {title: 'Surligné', value: 'highlight'},
         ],
         annotations: [
           {
@@ -24,6 +25,25 @@ export const cellRichText = defineType({
                 name: 'href',
                 type: 'url',
                 title: 'URL',
+              },
+            ],
+          },
+          {
+            name: 'color',
+            type: 'object',
+            title: 'Couleur du texte TEST',
+            fields: [{name: 'hex', type: 'string', title: 'Code couleur (hex)'}],
+          },
+          {
+            name: 'bgColor',
+            type: 'object',
+            title: 'Couleur de surlignage',
+            fields: [
+              {
+                name: 'hex',
+                type: 'string',
+                title: 'Code couleur (hex)',
+                description: 'Exemple : #2FC977',
               },
             ],
           },
