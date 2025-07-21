@@ -20,13 +20,14 @@ export default defineConfig({
 
   plugins: [
     colorInput(),
+    structureTool({structure}),
     presentationTool({
       previewUrl: {
-        origin: process.env.SANITY_STUDIO_PREVIEW_URL!,
+        origin: 'http://localhost:3000',
         previewMode: {enable: '/api/draft-mode/enable'},
       },
     }),
-    structureTool({structure}),
+
     visionTool(),
   ],
   schema: {

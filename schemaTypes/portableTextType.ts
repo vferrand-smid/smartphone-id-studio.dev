@@ -11,20 +11,44 @@ export default defineType({
         decorators: [
           {title: 'Gras', value: 'strong'},
           {title: 'Italique', value: 'em'},
-          {title: 'Surligné', value: 'highlight'},
         ],
         annotations: [
-          {
-            name: 'link',
-            type: 'object',
-            title: 'Lien',
-            fields: [{name: 'href', type: 'url', title: 'URL'}],
-          },
           {
             name: 'color',
             type: 'object',
             title: 'Couleur du texte',
-            fields: [{name: 'hex', type: 'string', title: 'Code couleur (hex)'}],
+            fields: [
+              {
+                name: 'color',
+                type: 'color',
+                title: 'Choisir une couleur',
+                options: {
+                  // Palette custom possible ici !
+                  colorList: ['#2fc977', '#ffc600'],
+                  // disableAlpha: true, // option pour virer la transparence
+                },
+              },
+            ],
+          },
+          {
+            name: 'bgColor',
+            type: 'object',
+            title: 'Surlignage (couleur de fond)',
+            fields: [
+              {
+                name: 'color',
+                type: 'color',
+                title: 'Choisir une couleur de fond',
+                options: {
+                  colorList: [
+                    '#2fc977', // vert
+                    '#ffe066', // jaune
+                    '#ffe4e1', // rose pâle
+                    '#cce8ff', // bleu pâle
+                  ],
+                },
+              },
+            ],
           },
         ],
       },
