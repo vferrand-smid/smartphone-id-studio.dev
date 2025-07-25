@@ -1,3 +1,4 @@
+import {MdFormatColorText, MdHighlight, MdLink} from 'react-icons/md'
 import {defineType} from 'sanity'
 
 export default defineType({
@@ -17,6 +18,7 @@ export default defineType({
             name: 'link',
             type: 'object',
             title: 'Lien',
+            icon: MdLink,
             fields: [
               {
                 name: 'href',
@@ -29,6 +31,7 @@ export default defineType({
             name: 'color',
             type: 'object',
             title: 'Couleur du texte',
+            icon: MdFormatColorText,
             fields: [
               {
                 name: 'color',
@@ -45,7 +48,8 @@ export default defineType({
           {
             name: 'bgColor',
             type: 'object',
-            title: 'Surlignage (couleur de fond)',
+            title: 'Surlignage ',
+            icon: MdHighlight,
             fields: [
               {
                 name: 'color',
