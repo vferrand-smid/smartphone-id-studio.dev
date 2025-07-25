@@ -14,6 +14,18 @@ export default defineType({
         ],
         annotations: [
           {
+            name: 'link',
+            type: 'object',
+            title: 'Lien',
+            fields: [
+              {
+                name: 'href',
+                type: 'url',
+                title: 'URL',
+              },
+            ],
+          },
+          {
             name: 'color',
             type: 'object',
             title: 'Couleur du texte',
