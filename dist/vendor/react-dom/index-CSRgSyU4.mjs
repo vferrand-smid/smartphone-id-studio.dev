@@ -643,13 +643,13 @@ function Do(e) {
 function Hl(e, n) {
   return e == null || e === "http://www.w3.org/1999/xhtml" ? Do(n) : e === "http://www.w3.org/2000/svg" && n === "foreignObject" ? "http://www.w3.org/1999/xhtml" : e;
 }
-var Jt, Fo = function(e) {
+var Jt, Fo = (function(e) {
   return typeof MSApp < "u" && MSApp.execUnsafeLocalFunction ? function(n, t, r, l) {
     MSApp.execUnsafeLocalFunction(function() {
       return e(n, t, r, l);
     });
   } : e;
-}(function(e, n) {
+})(function(e, n) {
   if (e.namespaceURI !== "http://www.w3.org/2000/svg" || "innerHTML" in e) e.innerHTML = n;
   else {
     for (Jt = Jt || document.createElement("div"), Jt.innerHTML = "<svg>" + n.valueOf().toString() + "</svg>", n = Jt.firstChild; e.firstChild; ) e.removeChild(e.firstChild);
@@ -3403,7 +3403,7 @@ la = function(e, n, t, r) {
     } else d !== "dangerouslySetInnerHTML" && d !== "children" && d !== "suppressContentEditableWarning" && d !== "suppressHydrationWarning" && d !== "autoFocus" && (_t.hasOwnProperty(d) ? u || (u = []) : (u = u || []).push(d, null));
     for (d in r) {
       var s = r[d];
-      if (o = l != null ? l[d] : void 0, r.hasOwnProperty(d) && s !== o && (s != null || o != null)) if (d === "style") if (o) {
+      if (o = l?.[d], r.hasOwnProperty(d) && s !== o && (s != null || o != null)) if (d === "style") if (o) {
         for (i in o) !o.hasOwnProperty(i) || s && s.hasOwnProperty(i) || (t || (t = {}), t[i] = "");
         for (i in s) s.hasOwnProperty(i) && o[i] !== s[i] && (t || (t = {}), t[i] = s[i]);
       } else t || (u || (u = []), u.push(

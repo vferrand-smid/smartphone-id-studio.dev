@@ -697,7 +697,7 @@ function k(t) {
   for (var e = [], r = 1; r < arguments.length; r++) e[r - 1] = arguments[r];
   return new Error("An error occurred. See https://github.com/styled-components/styled-components/blob/main/packages/styled-components/src/utils/errors.md#".concat(t, " for more information.").concat(e.length > 0 ? " Args: ".concat(e.join(", ")) : ""));
 }
-var Dr = function() {
+var Dr = (function() {
   function t(e) {
     this.groupSizes = new Uint32Array(512), this.length = 512, this.tag = e;
   }
@@ -723,7 +723,7 @@ var Dr = function() {
     for (var n = this.groupSizes[e], s = this.indexOfGroup(e), o = s + n, a = s; a < o; a++) r += "".concat(this.tag.getRule(a)).concat(Zt);
     return r;
   }, t;
-}(), Ct = /* @__PURE__ */ new Map(), Et = /* @__PURE__ */ new Map(), It = 1, yt = function(t) {
+})(), Ct = /* @__PURE__ */ new Map(), Et = /* @__PURE__ */ new Map(), It = 1, yt = function(t) {
   if (Ct.has(t)) return Ct.get(t);
   for (; Et.has(It); ) It++;
   var e = It++;
@@ -753,23 +753,23 @@ function qt() {
   return typeof __webpack_nonce__ < "u" ? __webpack_nonce__ : null;
 }
 var De = function(t) {
-  var e = document.head, r = t || e, n = document.createElement("style"), s = function(c) {
+  var e = document.head, r = t || e, n = document.createElement("style"), s = (function(c) {
     var i = Array.from(c.querySelectorAll("style[".concat(L, "]")));
     return i[i.length - 1];
-  }(r), o = s !== void 0 ? s.nextSibling : null;
+  })(r), o = s !== void 0 ? s.nextSibling : null;
   n.setAttribute(L, _e), n.setAttribute(xt, X);
   var a = qt();
   return a && n.setAttribute("nonce", a), r.insertBefore(n, o), n;
-}, Lr = function() {
+}, Lr = (function() {
   function t(e) {
-    this.element = De(e), this.element.appendChild(document.createTextNode("")), this.sheet = function(r) {
+    this.element = De(e), this.element.appendChild(document.createTextNode("")), this.sheet = (function(r) {
       if (r.sheet) return r.sheet;
       for (var n = document.styleSheets, s = 0, o = n.length; s < o; s++) {
         var a = n[s];
         if (a.ownerNode === r) return a;
       }
       throw k(17);
-    }(this.element), this.length = 0;
+    })(this.element), this.length = 0;
   }
   return t.prototype.insertRule = function(e, r) {
     try {
@@ -783,7 +783,7 @@ var De = function(t) {
     var r = this.sheet.cssRules[e];
     return r && r.cssText ? r.cssText : "";
   }, t;
-}(), Wr = function() {
+})(), Wr = (function() {
   function t(e) {
     this.element = De(e), this.nodes = this.element.childNodes, this.length = 0;
   }
@@ -798,7 +798,7 @@ var De = function(t) {
   }, t.prototype.getRule = function(e) {
     return e < this.length ? this.nodes[e].textContent : "";
   }, t;
-}(), Yr = function() {
+})(), Yr = (function() {
   function t(e) {
     this.rules = [], this.length = 0;
   }
@@ -809,16 +809,16 @@ var De = function(t) {
   }, t.prototype.getRule = function(e) {
     return e < this.length ? this.rules[e] : "";
   }, t;
-}(), ge = ct, Br = { isServer: !ct, useCSSOMInjection: !Cr }, et = function() {
+})(), ge = ct, Br = { isServer: !ct, useCSSOMInjection: !Cr }, et = (function() {
   function t(e, r, n) {
     e === void 0 && (e = tt), r === void 0 && (r = {});
     var s = this;
     this.options = E(E({}, Br), e), this.gs = r, this.names = new Map(n), this.server = !!e.isServer, !this.server && ct && ge && (ge = !1, de(this)), ee(this, function() {
-      return function(o) {
+      return (function(o) {
         for (var a = o.getTag(), c = a.length, i = "", h = function(p) {
-          var l = function(P) {
+          var l = (function(P) {
             return Et.get(P);
-          }(p);
+          })(p);
           if (l === void 0) return "continue";
           var g = o.names.get(l), y = a.getGroup(p);
           if (g === void 0 || !g.size || y.length === 0) return "continue";
@@ -828,7 +828,7 @@ var De = function(t) {
           }), i += "".concat(y).concat(w, '{content:"').concat(R, '"}').concat(Zt);
         }, u = 0; u < c; u++) h(u);
         return i;
-      }(s);
+      })(s);
     });
   }
   return t.registerId = function(e) {
@@ -840,10 +840,10 @@ var De = function(t) {
   }, t.prototype.allocateGSInstance = function(e) {
     return this.gs[e] = (this.gs[e] || 0) + 1;
   }, t.prototype.getTag = function() {
-    return this.tag || (this.tag = (e = function(r) {
+    return this.tag || (this.tag = (e = (function(r) {
       var n = r.useCSSOMInjection, s = r.target;
       return r.isServer ? new Yr(s) : n ? new Lr(s) : new Wr(s);
-    }(this.options), new Dr(e)));
+    })(this.options), new Dr(e)));
     var e;
   }, t.prototype.hasNameForId = function(e, r) {
     return this.names.has(e) && this.names.get(e).has(r);
@@ -862,7 +862,7 @@ var De = function(t) {
   }, t.prototype.clearTag = function() {
     this.tag = void 0;
   }, t;
-}(), qr = /&/g, Hr = /^\s*\/\/.*$/gm;
+})(), qr = /&/g, Hr = /^\s*\/\/.*$/gm;
 function je(t, e) {
   return t.map(function(r) {
     return r.type === "rule" && (r.value = "".concat(e, " ").concat(r.value), r.value = r.value.replaceAll(",", ",".concat(e, " ")), r.props = r.props.map(function(n) {
@@ -909,7 +909,7 @@ function Ur(t) {
   }, [t.shouldForwardProp, o, a]);
   return O.createElement(re.Provider, { value: c }, O.createElement(Kr.Provider, { value: a }, t.children));
 }
-var Me = function() {
+var Me = (function() {
   function t(e, r) {
     var n = this;
     this.inject = function(s, o) {
@@ -923,7 +923,7 @@ var Me = function() {
   return t.prototype.getName = function(e) {
     return e === void 0 && (e = Ht), this.name + e.hash;
   }, t;
-}(), Vr = function(t) {
+})(), Vr = function(t) {
   return t >= "A" && t <= "Z";
 };
 function me(t) {
@@ -964,7 +964,7 @@ function We(t) {
   }
   return !0;
 }
-var Zr = Re(X), Jr = function() {
+var Zr = Re(X), Jr = (function() {
   function t(e, r, n) {
     this.rules = e, this.staticRulesId = "", this.isStatic = (n === void 0 || n.isStatic) && We(e), this.componentId = r, this.baseHash = V(Zr, r), this.baseStyle = n, et.registerId(r);
   }
@@ -995,7 +995,7 @@ var Zr = Re(X), Jr = function() {
     }
     return s;
   }, t;
-}(), H = O.createContext(void 0), sn = H.Consumer;
+})(), H = O.createContext(void 0), sn = H.Consumer;
 function on() {
   var t = Se(H);
   if (!t) throw k(18);
@@ -1003,7 +1003,7 @@ function on() {
 }
 function an(t) {
   var e = O.useContext(H), r = vt(function() {
-    return function(n, s) {
+    return (function(n, s) {
       if (!n) throw k(14);
       if (q(n)) {
         var o = n(s);
@@ -1011,20 +1011,20 @@ function an(t) {
       }
       if (Array.isArray(n) || typeof n != "object") throw k(8);
       return s ? E(E({}, s), n) : n;
-    }(t.theme, e);
+    })(t.theme, e);
   }, [t.theme, e]);
   return t.children ? O.createElement(H.Provider, { value: r }, t.children) : null;
 }
 var Mt = {};
 function Qr(t, e, r) {
-  var n = te(t), s = t, o = !Ft(t), a = e.attrs, c = a === void 0 ? $t : a, i = e.componentId, h = i === void 0 ? function(I, _) {
+  var n = te(t), s = t, o = !Ft(t), a = e.attrs, c = a === void 0 ? $t : a, i = e.componentId, h = i === void 0 ? (function(I, _) {
     var v = typeof I != "string" ? "sc" : ue(I);
     Mt[v] = (Mt[v] || 0) + 1;
     var d = "".concat(v, "-").concat(Qt(X + v + Mt[v]));
     return _ ? "".concat(_, "-").concat(d) : d;
-  }(e.displayName, e.parentComponentId) : i, u = e.displayName, p = u === void 0 ? function(I) {
+  })(e.displayName, e.parentComponentId) : i, u = e.displayName, p = u === void 0 ? (function(I) {
     return Ft(I) ? "styled.".concat(I) : "Styled(".concat(ke(I), ")");
-  }(t) : u, l = e.displayName && e.componentId ? "".concat(ue(e.displayName), "-").concat(e.componentId) : e.componentId || h, g = n && s.attrs ? s.attrs.concat(c).filter(Boolean) : c, y = e.shouldForwardProp;
+  })(t) : u, l = e.displayName && e.componentId ? "".concat(ue(e.displayName), "-").concat(e.componentId) : e.componentId || h, g = n && s.attrs ? s.attrs.concat(c).filter(Boolean) : c, y = e.shouldForwardProp;
   if (n && s.shouldForwardProp) {
     var w = s.shouldForwardProp;
     if (e.shouldForwardProp) {
@@ -1036,32 +1036,32 @@ function Qr(t, e, r) {
   }
   var P = new Jr(r, l, n ? s.componentStyle : void 0);
   function C(I, _) {
-    return function(v, d, K) {
-      var pt = v.attrs, Be = v.componentStyle, qe = v.defaultProps, He = v.foldedComponentIds, Ke = v.styledComponentId, Ue = v.target, Ve = O.useContext(H), Ze = _t(), Nt = v.shouldForwardProp || Ze.shouldForwardProp, se = Jt(d, Ve, qe) || tt, D = function(lt, st, dt) {
+    return (function(v, d, K) {
+      var pt = v.attrs, Be = v.componentStyle, qe = v.defaultProps, He = v.foldedComponentIds, Ke = v.styledComponentId, Ue = v.target, Ve = O.useContext(H), Ze = _t(), Nt = v.shouldForwardProp || Ze.shouldForwardProp, se = Jt(d, Ve, qe) || tt, D = (function(lt, st, dt) {
         for (var ot, W = E(E({}, st), { className: void 0, theme: dt }), Dt = 0; Dt < lt.length; Dt += 1) {
           var gt = q(ot = lt[Dt]) ? ot(W) : ot;
           for (var F in gt) W[F] = F === "className" ? Y(W[F], gt[F]) : F === "style" ? E(E({}, W[F]), gt[F]) : gt[F];
         }
         return st.className && (W.className = Y(W.className, st.className)), W;
-      }(pt, d, se), ht = D.as || Ue, nt = {};
+      })(pt, d, se), ht = D.as || Ue, nt = {};
       for (var z in D) D[z] === void 0 || z[0] === "$" || z === "as" || z === "theme" && D.theme === se || (z === "forwardedAs" ? nt.as = D.forwardedAs : Nt && !Nt(z, ht) || (nt[z] = D[z]));
-      var oe = function(lt, st) {
+      var oe = (function(lt, st) {
         var dt = _t(), ot = lt.generateAndInjectStyles(st, dt.styleSheet, dt.stylis);
         return ot;
-      }(Be, D), Tt = Y(He, Ke);
+      })(Be, D), Tt = Y(He, Ke);
       return oe && (Tt += " " + oe), D.className && (Tt += " " + D.className), nt[Ft(ht) && !Ae.has(ht) ? "class" : "className"] = Tt, K && (nt.ref = K), Xe(ht, nt);
-    }(b, I, _);
+    })(b, I, _);
   }
   C.displayName = p;
   var b = O.forwardRef(C);
   return b.attrs = g, b.componentStyle = P, b.displayName = p, b.shouldForwardProp = y, b.foldedComponentIds = n ? Y(s.foldedComponentIds, s.styledComponentId) : "", b.styledComponentId = l, b.target = n ? s.target : t, Object.defineProperty(b, "defaultProps", { get: function() {
     return this._foldedDefaultProps;
   }, set: function(I) {
-    this._foldedDefaultProps = n ? function(_) {
+    this._foldedDefaultProps = n ? (function(_) {
       for (var v = [], d = 1; d < arguments.length; d++) v[d - 1] = arguments[d];
       for (var K = 0, pt = v; K < pt.length; K++) Bt(_, pt[K], !0);
       return _;
-    }({}, s.defaultProps, I) : I;
+    })({}, s.defaultProps, I) : I;
   } }), ee(b, function() {
     return ".".concat(b.styledComponentId);
   }), o && Xt(b, t, { attrs: !0, componentStyle: !0, displayName: !0, foldedComponentIds: !0, shouldForwardProp: !0, styledComponentId: !0, target: !0 }), b;
@@ -1097,7 +1097,7 @@ var Ye = function(t) {
 Ae.forEach(function(t) {
   Xr[t] = Ye(t);
 });
-var tn = function() {
+var tn = (function() {
   function t(e, r) {
     this.rules = e, this.componentId = r, this.isStatic = We(e), et.registerId(this.componentId + 1);
   }
@@ -1109,18 +1109,18 @@ var tn = function() {
   }, t.prototype.renderStyles = function(e, r, n, s) {
     e > 2 && et.registerId(this.componentId + e), this.removeStyles(e, n), this.createStyles(e, r, n, s);
   }, t;
-}();
+})();
 function cn(t) {
   for (var e = [], r = 1; r < arguments.length; r++) e[r - 1] = arguments[r];
   var n = ne.apply(void 0, Z([t], e, !1)), s = "sc-global-".concat(Qt(JSON.stringify(n))), o = new tn(n, s), a = function(c) {
     var i = _t(), h = O.useContext(H), u = O.useRef(i.styleSheet.allocateGSInstance(s)).current;
-    return i.styleSheet.server && function(p, l, g, y, w) {
+    return i.styleSheet.server && (function(p, l, g, y, w) {
       if (o.isStatic) o.renderStyles(p, Ir, g, w);
       else {
         var R = E(E({}, l), { theme: Jt(l, y, a.defaultProps) });
         o.renderStyles(p, R, g, w);
       }
-    }(u, c, i.styleSheet, h, i.stylis), null;
+    })(u, c, i.styleSheet, h, i.stylis), null;
   };
   return O.memo(a);
 }
@@ -1136,7 +1136,7 @@ function fn(t) {
   });
   return e.displayName = "WithTheme(".concat(ke(t), ")"), Xt(e, t);
 }
-var en = /^\s*<\/[a-z]/i, pn = function() {
+var en = /^\s*<\/[a-z]/i, pn = (function() {
   function t() {
     var e = this;
     this._emitSheetCSS = function() {
@@ -1177,7 +1177,7 @@ var en = /^\s*<\/[a-z]/i, pn = function() {
       a.emit("error", c);
     }), n.pipe(a);
   }, t;
-}(), hn = { StyleSheet: et, mainSheet: Fe };
+})(), hn = { StyleSheet: et, mainSheet: Fe };
 export {
   pn as ServerStyleSheet,
   nn as StyleSheetConsumer,
