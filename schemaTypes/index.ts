@@ -3,6 +3,7 @@ import {cellRichText} from './cellRichText'
 import {externalImageType} from './externalImageType'
 import link from './link'
 import {pageType} from './pageType'
+import legalPage from './legalPage'
 import blockContent from './portableTextType'
 import {tableCustom} from './tableCustom'
 import tableOfContents from './tableOfContents'
@@ -18,4 +19,5 @@ export const schemaTypes = [
   blockContent,
   cellRichText,
   tableCustom,
+  legalPage,
 ]
