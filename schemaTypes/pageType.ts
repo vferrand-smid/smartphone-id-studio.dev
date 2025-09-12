@@ -1,6 +1,37 @@
 import {DocumentIcon} from '@sanity/icons'
 import {defineField, defineType} from 'sanity'
 
+const isUniquePerLocale = (slug, context) => {
+  const {document, getClient} = context
+  const client = getClient({apiVersion: '2024-06-01'}) // adapte si besoin
+
+  const id = document?._id?.replace(/^drafts\./, '')
+  const type = document?._type || 'page'
+  const locale = document?.locale
+  const current = slug?.current
+
+  if (!current || !locale) return true
+
+  const params = {
+    type,
+    slug: current,
+    locale,
+    draftId: `drafts.${id}`,
+    publishedId: id,
+  }
+
+  // Return true when no other doc (except this one’s draft/published pair)
+  // has the same slug in the same locale
+  const query = `!defined(*[
+    _type == $type &&
+    slug.current == $slug &&
+    locale == $locale &&
+    !(_id in [$draftId, $publishedId])
+  ][0]._id)`
+
+  return client.fetch(query, params)
+}
+
 export const pageType = defineType({
   name: 'page',
   title: 'Page',
@@ -8,7 +39,16 @@ export const pageType = defineType({
   icon: DocumentIcon,
   fields: [
     defineField({name: 'title', type: 'string'}),
-    defineField({name: 'slug', type: 'slug'}),
+    defineField({
+      name: 'slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        maxLength: 96,
+        isUnique: isUniquePerLocale, // <-- clé
+      },
+      validation: (Rule) => Rule.required(),
+    }),
     defineField({name: 'date', type: 'datetime'}),
     defineField({name: 'modified', type: 'datetime'}),
     defineField({
