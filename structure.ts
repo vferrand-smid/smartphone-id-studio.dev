@@ -109,55 +109,33 @@ export const structure = async (S: StructureBuilder) => {
   )
 
   // ⚖️ Section "Pages légales" (FR/EN uniquement, IDs fixes)
-  const buildLegalSection = (S: StructureBuilder) =>
-    S.listItem()
+  const buildLegalSection = (S: StructureBuilder) => {
+    const legalDocs = [
+      {title: 'Privacy (FR)', id: 'legal_privacy_fr'},
+      {title: 'Privacy (EN)', id: 'legal_privacy_en'},
+      {title: 'Terms (FR)', id: 'legal_terms_fr'},
+      {title: 'Terms (EN)', id: 'legal_terms_en'},
+      {title: 'Imprint (FR)', id: 'legal_imprint_fr'},
+      {title: 'Imprint (EN)', id: 'legal_imprint_en'},
+      {title: 'Cookies (FR)', id: 'legal_cookies_fr'},
+      {title: 'Cookies (EN)', id: 'legal_cookies_en'},
+    ] as const
+
+    const legalItems = legalDocs.map(({title, id}) =>
+      S.listItem()
+        .title(title)
+        .child(
+          S.document()
+            .schemaType('legalPage')
+            .documentId(id)
+            .views([S.view.form(), S.view.component(IframePreview).title('Preview')]),
+        ),
+    )
+
+    return S.listItem()
       .title('Pages légales ⚖️')
-      .child(
-        S.list()
-          .title('Pages légales')
-          .items([
-            S.listItem()
-              .title('Privacy (FR)')
-              .child(
-                S.editor().id('privacy-fr').schemaType('legalPage').documentId('legal_privacy_fr'),
-              ),
-            S.listItem()
-              .title('Privacy (EN)')
-              .child(
-                S.editor().id('privacy-en').schemaType('legalPage').documentId('legal_privacy_en'),
-              ),
-            S.listItem()
-              .title('Terms (FR)')
-              .child(
-                S.editor().id('terms-fr').schemaType('legalPage').documentId('legal_terms_fr'),
-              ),
-            S.listItem()
-              .title('Terms (EN)')
-              .child(
-                S.editor().id('terms-en').schemaType('legalPage').documentId('legal_terms_en'),
-              ),
-            S.listItem()
-              .title('Imprint (FR)')
-              .child(
-                S.editor().id('imprint-fr').schemaType('legalPage').documentId('legal_imprint_fr'),
-              ),
-            S.listItem()
-              .title('Imprint (EN)')
-              .child(
-                S.editor().id('imprint-en').schemaType('legalPage').documentId('legal_imprint_en'),
-              ),
-            S.listItem()
-              .title('Cookies (FR)')
-              .child(
-                S.editor().id('cookies-fr').schemaType('legalPage').documentId('legal_cookies_fr'),
-              ),
-            S.listItem()
-              .title('Cookies (EN)')
-              .child(
-                S.editor().id('cookies-en').schemaType('legalPage').documentId('legal_cookies_en'),
-              ),
-          ]),
-      )
+      .child(S.list().title('Pages légales').items(legalItems))
+  }
 
   // ➕ Structure finale
   return S.list()

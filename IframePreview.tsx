@@ -1,18 +1,35 @@
 export default function IframePreview(props: any) {
   const doc = props.document.displayed
-  if (!doc?.slug?.current || !doc?.locale) {
-    return <div style={{padding: 32}}>Pas de slug ou de locale…</div>
-  }
-  // const params = new URLSearchParams({
-  //   locale: doc.locale,
-  //   slug: doc.slug.current,
-  //   type: doc._type,
-  //   rev: doc._rev || '',
-  // }).toString()
-  //const url = `${process.env.PREVIEW_FRONT_URL}/api/preview?${params}`
   const previewFrontUrl = process.env.SANITY_STUDIO_PREVIEW_URL
-  console.log('SANITY_STUDIO_PREVIEW_URL :', previewFrontUrl)
-  const url = `${previewFrontUrl}/api/preview?locale=${doc.locale}&type=blog&slug=${doc.slug.current}`
+  if (!doc?.slug?.current) {
+    return <div style={{padding: 32}}>Pas de slug défini…</div>
+  }
+
+  if (!previewFrontUrl) {
+    return <div style={{padding: 32}}>Prévisualisation indisponible (URL front manquante)</div>
+  }
+
+  const docType = doc?._type
+  const params = new URLSearchParams({slug: doc.slug.current})
+
+  if (docType === 'legalPage') {
+    const pivotLanguage = typeof doc?.pivotLanguage === 'string' ? doc.pivotLanguage.toLowerCase() : ''
+    if (!pivotLanguage) {
+      return <div style={{padding: 32}}>Pas de langue pivot définie…</div>
+    }
+    params.set('locale', pivotLanguage)
+    params.set('type', 'legal')
+    if (typeof doc?.kind === 'string' && doc.kind) {
+      params.set('kind', doc.kind)
+    }
+  } else if (doc?.locale) {
+    params.set('locale', doc.locale.toLowerCase())
+    params.set('type', 'blog')
+  } else {
+    return <div style={{padding: 32}}>Pas de locale définie…</div>
+  }
+
+  const url = `${previewFrontUrl}/api/preview?${params.toString()}`
   return (
     <div style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
       <div style={{margin: '16px 8px'}}>
