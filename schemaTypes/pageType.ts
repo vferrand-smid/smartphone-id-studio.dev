@@ -1,7 +1,7 @@
 import {DocumentIcon} from '@sanity/icons'
 import {defineField, defineType} from 'sanity'
 
-const isUniquePerLocale = (slug, context) => {
+const isUniquePerLocale = (slug: any, context: any) => {
   const {document, getClient} = context
   const client = getClient({apiVersion: '2024-06-01'}) // adapte si besoin
 
@@ -68,6 +68,7 @@ export const pageType = defineType({
       type: 'string',
       options: {
         list: [
+          {title: 'Test', value: 'test'},
           {title: 'Carte vitale', value: 'carte-vitale'},
           {title: 'Faire sa photo soi-même', value: 'faire-sa-photo-soi-meme'},
           {title: "Normes photo d'identité", value: 'normes-photo-d-identite'},
