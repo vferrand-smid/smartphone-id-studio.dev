@@ -1,6 +1,9 @@
 import {DocumentIcon} from '@sanity/icons'
 import {defineField, defineType} from 'sanity'
 
+import {getCategoriesForLocale} from './categoryOptions'
+import {CategorySelectInput} from './components/CategorySelectInput'
+
 const isUniquePerLocale = (slug: any, context: any) => {
   const {document, getClient} = context
   const client = getClient({apiVersion: '2024-06-01'}) // adapte si besoin
@@ -62,26 +65,7 @@ export const pageType = defineType({
         ],
       },
     }),
-    defineField({
-      name: 'categorie',
-      title: 'Catégorie',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Test', value: 'test'},
-          {title: 'Carte vitale', value: 'carte-vitale'},
-          {title: 'Faire sa photo soi-même', value: 'faire-sa-photo-soi-meme'},
-          {title: "Normes photo d'identité", value: 'normes-photo-d-identite'},
-          {title: 'Passeport', value: 'passeport'},
-          {title: 'Produit Smartphone iD', value: 'produit-smartphone-id'},
-          {title: "Carte d'identité", value: 'carte-d-identite'},
-          {title: 'Permis de conduire', value: 'permis-de-conduire'},
-          {title: 'Titre de séjour', value: 'titre-de-sejour'},
-          {title: 'Cartes officielles', value: 'cartes-officielles'},
-        ],
-      },
-      validation: (Rule) => Rule.required(),
-    }),
+
     defineField({
       name: 'content',
       type: 'blockContent',
@@ -152,6 +136,30 @@ export const pageType = defineType({
         ],
       },
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'categorie',
+      title: 'Catégorie',
+      type: 'string',
+      description: 'Sélectionnez d’abord la locale pour afficher les catégories disponibles.',
+      hidden: ({document}) => !document?.locale,
+      components: {
+        input: CategorySelectInput,
+      },
+      options: {
+        list: [],
+      },
+      validation: (Rule) =>
+        Rule.required().custom((value, context) => {
+          if (!value) return true
+
+          const locale = context?.document?.locale as string | undefined
+          const available = getCategoriesForLocale(locale).map((option) => option.value)
+
+          return available.includes(value)
+            ? true
+            : 'Cette catégorie n’est pas disponible pour la locale sélectionnée.'
+        }),
     }),
     defineField({
       name: 'sourceId',
