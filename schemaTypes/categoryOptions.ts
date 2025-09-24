@@ -424,7 +424,7 @@ const CATEGORY_IDS_BY_LOCALE: Record<string, CategoryId[]> = {
 const resolveLocaleCandidates = (locale?: string) => {
   if (!locale) return ['default']
 
-  const normalized = locale.toLowerCase()
+  const normalized = locale.replace(/_/g, '-').toLowerCase()
   const parts = normalized.split('-')
   const base = parts[0]
 
