@@ -11,7 +11,11 @@ type CategoryDefinition = {
 
 const CATEGORY_DEFINITIONS = {
   test: {value: 'test', defaultTitle: 'Test'},
-  'photos-identité-DIY': {value: 'Photos-identité-DIY', defaultTitle: "Photos d'identité DIY"},
+  'photos-identité': {
+    value: 'Photos-identité',
+    defaultTitle: "Photos d'identité",
+    titles: {'ru-ru': 'фото на паспорт'},
+  },
   'normes-photo-d-identite': {
     value: 'normes-photo-d-identite',
     defaultTitle: "Normes photo d'identité",
@@ -20,20 +24,62 @@ const CATEGORY_DEFINITIONS = {
   'permis-de-conduire': {
     value: 'permis-de-conduire',
     defaultTitle: 'Permis de conduire',
-    titles: {en: "Driver's License", es: 'Permiso de conducir'},
+    titles: {
+      en: "Driver's License",
+      'it-it': 'Patente di guida',
+      'es-es': 'Permiso de conducir',
+      'es-mx': 'Permiso de conducir',
+      'de-de': 'Fuehrerschein',
+      'es-co': 'Licencia de Conducción',
+      'es-ar': 'Permiso de conducir',
+      'nl-nl': 'Rijbewijs',
+      'ar-ae': 'رخـصة القـيادة',
+      'pl-pl': 'Prawo jazdy',
+      'pt-br': 'Carteiras de Motorista',
+      'ru-ru': 'Водительское удостоверение',
+    },
   },
   'titre-de-sejour': {
     value: 'titre-de-sejour',
     defaultTitle: 'Titre de séjour',
     titles: {en: 'Residence permit'},
   },
-  passeport: {value: 'passeport', defaultTitle: 'Passeport', titles: {en: 'Passport'}},
+  passeport: {
+    value: 'passeport',
+    defaultTitle: 'Passeport',
+    titles: {
+      en: 'Passport',
+      'nl-nl': 'Paspoort',
+      'ar-ae': 'جواز السفر',
+      'pl-pl': 'Paszport',
+      'pt-br': 'Passaporte',
+      'ru-ru': 'паспорт',
+    },
+  },
   'carte-d-identite': {
     value: 'carte-d-identite',
     defaultTitle: "Carte d'identité",
-    titles: {en: 'ID card', 'it-it': 'Carta d’identità'},
+    titles: {
+      en: 'ID card',
+      'it-it': 'Carta d’identità',
+      'de-de': 'Personalausweis',
+      'nl-nl': 'ID-kaart ',
+      'ar-ae': 'بطاقة الهوية',
+      'pl-pl': 'Dowód osobisty',
+      'pt-br': 'Carteira de identidade',
+    },
   },
-  visa: {value: 'visa', defaultTitle: 'Visa'},
+  visa: {
+    value: 'visa',
+    defaultTitle: 'Visa',
+    titles: {
+      'nl-nl': 'Visum',
+      'ar-ae': 'التأشيرة',
+      'pl-pl': 'Wiza',
+      'pt-br': 'Visto',
+      'ru-ru': 'Виза',
+    },
+  },
   'articles-divers': {value: 'Articles-divers', defaultTitle: 'Articles divers'},
   'passport-photos-requirements': {
     value: 'Passport-Photos-Requirements',
@@ -46,6 +92,9 @@ const CATEGORY_DEFINITIONS = {
   'passport-photos-services-locations': {
     value: 'passport-photos-services-locations',
     defaultTitle: 'Passport Photos services & locations',
+    titles: {
+      'nl-nl': 'Pasfotodiensten',
+    },
   },
   'US-specific-document-photos': {
     value: 'US-specific-document-photos',
@@ -98,14 +147,20 @@ const CATEGORY_DEFINITIONS = {
   'residence-permit': {
     value: 'residence-permit',
     defaultTitle: 'Residence permit',
+    titles: {
+      'en-ie': 'Residence permit',
+      'de-de': 'Aufenthaltsgenehmigung',
+      'es-es': 'Permiso de residencia',
+      'es-ar': 'Permiso de residencia',
+      'nl-nl': 'Verblijfsvergunning',
+      'ar-ae': 'بطاقة الإقامة',
+      'pl-pl': 'Zezwolenie na pobyt',
+      'ru-ru': 'Вид на жительство',
+    },
   },
   'student-cards': {
     value: 'student-cards',
     defaultTitle: 'Student Cards',
-  },
-  'id-card': {
-    value: 'id-card',
-    defaultTitle: 'ID Card',
   },
   'ids-licences': {
     value: 'ids-licences',
@@ -114,10 +169,10 @@ const CATEGORY_DEFINITIONS = {
   'foto-passaporto': {
     value: 'foto-passaporto',
     defaultTitle: 'Foto passaporto',
-  },
-  'patente-di-guida': {
-    value: 'patente-di-guida',
-    defaultTitle: 'Patente di guida',
+    titles: {
+      'nl-nl': 'Pasfotos',
+      'pt-br': 'Foto Passaporte ',
+    },
   },
   'permesso-di-soggiorno': {
     value: 'permesso-di-soggiorno',
@@ -127,11 +182,94 @@ const CATEGORY_DEFINITIONS = {
     value: 'fototessera-norme-diy',
     defaultTitle: 'Fototessera norme & DIY',
   },
+  passfotodienste: {
+    value: 'passfotodienste',
+    defaultTitle: 'Passfotodienste',
+  },
+  'other-ids': {
+    value: 'other-ids',
+    defaultTitle: 'Other IDs',
+  },
+  dni: {
+    value: 'dni',
+    defaultTitle: 'DNI',
+  },
+  'foto-carnet': {
+    value: 'foto-carnet',
+    defaultTitle: 'Foto Carnet',
+  },
+  'foto-de-identidad': {
+    value: 'foto-de-identidad',
+    defaultTitle: 'Foto de identidad',
+    titles: {'ar-ae': 'صور جواز سفر دولية', 'pl-pl': 'Zdjęcie paszportu', 'et-ee': 'ID Foto'},
+  },
+  'cédula-digital-colombiana': {
+    value: 'cédula-digital-colombiana',
+    defaultTitle: 'Cédula Digital Colombiana',
+  },
+  Vaarbevoegdheidsbewijs: {
+    value: 'Vaarbevoegdheidsbewijs',
+    defaultTitle: 'Vaarbevoegdheidsbewijs',
+  },
+  'OV-chipkaart': {
+    value: 'OV-chipkaart',
+    defaultTitle: 'OV-chipkaart',
+  },
+  'gerechtsdeurwaarder-monsterboekje': {
+    value: 'gerechtsdeurwaarder-monsterboekje',
+    defaultTitle: 'Gerechtsdeurwaarder & Monsterboekje',
+  },
+  'صورشخصية إماراتية': {
+    value: 'صورشخصية إماراتية',
+    defaultTitle: 'صورشخصية إماراتية',
+  },
+  'ametlikud-dokumendid': {
+    value: 'ametlikud-dokumendid',
+    defaultTitle: 'Ametlikud dokumendid',
+  },
+  'foto-3x4': {
+    value: 'foto-3x4',
+    defaultTitle: 'Foto 3x4',
+  },
+  'identificações-legais': {
+    value: 'identificações-legais',
+    defaultTitle: 'Identificações Legais',
+  },
+  'licenças-de-saúde': {
+    value: 'licenças-de-saúde',
+    defaultTitle: 'Licenças de Saúde',
+  },
+  'documentos-de-imigração': {
+    value: 'documentos-de-imigração',
+    defaultTitle: 'Documentos de Imigração',
+  },
+  'autorizações-esportivas': {
+    value: 'autorizações-esportivas',
+    defaultTitle: 'Autorizações Esportivas',
+  },
+  'crachás-de-acesso': {
+    value: 'crachás-de-acesso',
+    defaultTitle: 'Crachás de Acesso',
+  },
+  'Фото-на-документы': {
+    value: 'Фото-на-документы',
+    defaultTitle: 'Фото на документы',
+  },
+  'Военный-билет': {
+    value: 'Военный-билет',
+    defaultTitle: 'Военный билет',
+  },
+  'document-personnels': {
+    value: 'document-personnels',
+    defaultTitle: 'Личные документы',
+  },
+  'cartes-d-accès': {
+    value: 'cartes-d-accès',
+    defaultTitle: 'Карты доступа',
+  },
 } satisfies Record<string, CategoryDefinition>
 
 type CategoryId = keyof typeof CATEGORY_DEFINITIONS
-
-const COMMON_CATEGORY_IDS: CategoryId[] = ['visa']
 
 const CATEGORY_IDS_BY_LOCALE: Record<string, CategoryId[]> = {
   default: [],
@@ -191,7 +329,7 @@ const CATEGORY_IDS_BY_LOCALE: Record<string, CategoryId[]> = {
     'passport-photo-requirements-DIY',
     'visa',
     'passport-photos-services-locations',
-    'id-card',
+    'carte-d-identite',
     'permis-de-conduire',
     'ids-licences',
     'passeport',
@@ -199,9 +337,87 @@ const CATEGORY_IDS_BY_LOCALE: Record<string, CategoryId[]> = {
   'it-it': [
     'foto-passaporto',
     'visa',
-    'patente-di-guida',
+    'permis-de-conduire',
     'carte-d-identite',
     'fototessera-norme-diy',
+  ],
+  'de-de': [
+    'passport-photo-requirements-DIY',
+    'passfotodienste',
+    'permis-de-conduire',
+    'visa',
+    'carte-d-identite',
+    'other-ids',
+    'residence-permit',
+  ],
+  'es-es': ['dni', 'passeport', 'permis-de-conduire', 'residence-permit', 'visa', 'foto-carnet'],
+  'es-mx': [
+    'dni',
+    'passeport',
+    'permis-de-conduire',
+    'residence-permit',
+    'foto-de-identidad',
+    'visa',
+  ],
+  'es-co': [
+    'passeport',
+    'visa',
+    'residence-permit',
+    'permis-de-conduire',
+    'cédula-digital-colombiana',
+    'foto-carnet',
+  ],
+  'es-ar': ['passeport', 'dni', 'permis-de-conduire', 'residence-permit', 'visa', 'foto-carnet'],
+  'nl-nl': [
+    'permis-de-conduire',
+    'residence-permit',
+    'passeport',
+    'carte-d-identite',
+    'foto-passaporto',
+    'passport-photos-services-locations',
+    'visa',
+    'Vaarbevoegdheidsbewijs',
+    'OV-chipkaart',
+    'gerechtsdeurwaarder-monsterboekje',
+  ],
+  'ar-ae': [
+    'passeport',
+    'permis-de-conduire',
+    'carte-d-identite',
+    'visa',
+    'صورشخصية إماراتية',
+    'foto-de-identidad',
+  ],
+  'pl-pl': [
+    'foto-de-identidad',
+    'carte-d-identite',
+    'residence-permit',
+    'permis-de-conduire',
+    'visa',
+  ],
+  'et-ee': ['foto-de-identidad', 'ametlikud-dokumendid'],
+  'pt-br': [
+    'passeport',
+    'foto-passaporto',
+    'visa',
+    'carte-d-identite',
+    'identificações-legais',
+    'licenças-de-saúde',
+    'permis-de-conduire',
+    'documentos-de-imigração',
+    'autorizações-esportivas',
+    'crachás-de-acesso',
+  ],
+  'ru-ru': [
+    'passeport',
+    'photos-identité',
+    'Фото-на-документы',
+    'visa',
+    'permis-de-conduire',
+    'Военный-билет',
+    'residence-permit',
+    'document-personnels',
+    'cartes-d-accès',
   ],
 }
 
@@ -242,7 +458,7 @@ const getCategoriesForLocale = (locale?: string): CategoryOption[] => {
       .map((candidate) => CATEGORY_IDS_BY_LOCALE[candidate])
       .find((ids): ids is CategoryId[] => Array.isArray(ids)) ?? CATEGORY_IDS_BY_LOCALE.default
 
-  const uniqueIds = Array.from(new Set([...localeSpecificIds, ...COMMON_CATEGORY_IDS]))
+  const uniqueIds = Array.from(new Set([...localeSpecificIds]))
 
   return uniqueIds
     .map((id) => {
