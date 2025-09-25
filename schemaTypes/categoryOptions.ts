@@ -1,3 +1,5 @@
+import slugify from '@sindresorhus/slugify'
+
 type CategoryOption = {
   title: string
   value: string
@@ -15,6 +17,10 @@ const CATEGORY_DEFINITIONS = {
     value: 'Photos-identité',
     defaultTitle: "Photos d'identité",
     titles: {'ru-ru': 'фото на паспорт'},
+  },
+  'photos-identité-DIY': {
+    value: 'Photos-identité DIY',
+    defaultTitle: "Photos d'identité DIY",
   },
   'normes-photo-d-identite': {
     value: 'normes-photo-d-identite',
@@ -421,6 +427,49 @@ const CATEGORY_IDS_BY_LOCALE: Record<string, CategoryId[]> = {
   ],
 }
 
+const BASE_LOCALE_ALIASES: Record<string, string> = {
+  fr: 'fr-fr',
+  en: 'en-us',
+  es: 'es-es',
+  nl: 'nl-nl',
+  ar: 'ar-ae',
+  pl: 'pl-pl',
+  et: 'et-ee',
+  pt: 'pt-br',
+  ru: 'ru-ru',
+  de: 'de-de',
+  it: 'it-it',
+}
+
+for (const [alias, target] of Object.entries(BASE_LOCALE_ALIASES)) {
+  const categories = CATEGORY_IDS_BY_LOCALE[target]
+  if (categories) {
+    CATEGORY_IDS_BY_LOCALE[alias] = categories
+  }
+}
+
+const sanitizeCategoryValue = (value: unknown): string => {
+  if (typeof value !== 'string') return ''
+
+  const trimmed = value.trim()
+  if (!trimmed) return ''
+
+  const normalized = slugify(trimmed, {lowercase: true})
+
+  return normalized || trimmed.toLowerCase()
+}
+
+const getCategoryValue = (id: CategoryId): string => {
+  const definition = CATEGORY_DEFINITIONS[id] as CategoryDefinition | undefined
+  if (!definition) return sanitizeCategoryValue(id) || id
+
+  const fromDefinition = sanitizeCategoryValue(definition.value)
+  if (fromDefinition) return fromDefinition
+
+  const fromId = sanitizeCategoryValue(id)
+  return fromId || id
+}
+
 const resolveLocaleCandidates = (locale?: string) => {
   if (!locale) return ['default']
 
@@ -435,17 +484,23 @@ const resolveLocaleCandidates = (locale?: string) => {
   return Array.from(new Set(candidates))
 }
 
-const getCategoryTitle = (id: CategoryId, localeKey?: string) => {
-  const definition = CATEGORY_DEFINITIONS[id]
-  if (!localeKey) return definition.defaultTitle
+const getCategoryTitle = (id: CategoryId, localeCandidates: string[] = []) => {
+  const definition = CATEGORY_DEFINITIONS[id] as CategoryDefinition | undefined
+  if (!definition) return ''
 
-  const candidates = [localeKey]
-  const base = localeKey.split('-')[0]
-  if (base && base !== localeKey) candidates.push(base)
+  const titles = definition.titles
 
-  for (const candidate of candidates) {
-    const translation = definition.titles?.[candidate]
+  for (const candidate of localeCandidates) {
+    if (candidate === 'default') continue
+
+    const translation = titles?.[candidate]
     if (translation) return translation
+
+    const base = candidate.split('-')[0]
+    if (base && base !== candidate) {
+      const baseTranslation = titles?.[base]
+      if (baseTranslation) return baseTranslation
+    }
   }
 
   return definition.defaultTitle
@@ -462,16 +517,20 @@ const getCategoriesForLocale = (locale?: string): CategoryOption[] => {
 
   return uniqueIds
     .map((id) => {
-      const definition = CATEGORY_DEFINITIONS[id]
-      if (!definition) return null
+      if (!CATEGORY_DEFINITIONS[id]) return null
 
-      const localeKey = localeCandidates[0]
-      const title = getCategoryTitle(id, localeKey)
+      const title = getCategoryTitle(id, localeCandidates)
+      const value = getCategoryValue(id)
 
-      return {value: definition.value, title}
+      return {value, title}
     })
     .filter((option): option is CategoryOption => Boolean(option))
 }
 
-export {getCategoriesForLocale}
+const ALL_CATEGORY_OPTIONS: CategoryOption[] = (Object.keys(CATEGORY_DEFINITIONS) as CategoryId[]).map((id) => ({
+  value: getCategoryValue(id),
+  title: getCategoryTitle(id),
+}))
+
+export {ALL_CATEGORY_OPTIONS, getCategoriesForLocale, sanitizeCategoryValue}
 export type {CategoryOption}

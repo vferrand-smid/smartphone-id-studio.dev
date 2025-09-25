@@ -1,13 +1,18 @@
 // schemas/link.ts
-export default {
+import {defineField, defineType} from 'sanity'
+
+import {validateLink} from './utils/linkValidation'
+
+export default defineType({
   name: 'link',
   type: 'object',
   title: 'Lien',
   fields: [
-    {
+    defineField({
       name: 'href',
-      type: 'url',
+      type: 'string',
       title: 'URL',
-    },
+      validation: (Rule) => Rule.custom(validateLink),
+    }),
   ],
-}
+})

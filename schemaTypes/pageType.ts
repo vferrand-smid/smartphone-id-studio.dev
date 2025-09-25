@@ -1,7 +1,7 @@
 import {DocumentIcon} from '@sanity/icons'
 import {defineField, defineType} from 'sanity'
 
-import {getCategoriesForLocale} from './categoryOptions'
+import {ALL_CATEGORY_OPTIONS, getCategoriesForLocale, sanitizeCategoryValue} from './categoryOptions'
 import {CategorySelectInput} from './components/CategorySelectInput'
 
 const isUniquePerLocale = (slug: any, context: any) => {
@@ -147,7 +147,7 @@ export const pageType = defineType({
         input: CategorySelectInput,
       },
       options: {
-        list: [],
+        list: ALL_CATEGORY_OPTIONS,
       },
       validation: (Rule) =>
         Rule.required().custom((value, context) => {
@@ -155,8 +155,9 @@ export const pageType = defineType({
 
           const locale = context?.document?.locale as string | undefined
           const available = getCategoriesForLocale(locale).map((option) => option.value)
+          const normalizedAvailable = new Set(available.map(sanitizeCategoryValue))
 
-          return available.includes(value)
+          return normalizedAvailable.has(sanitizeCategoryValue(value))
             ? true
             : 'Cette catégorie n’est pas disponible pour la locale sélectionnée.'
         }),

@@ -1,6 +1,8 @@
 import {MdFormatColorText, MdHighlight, MdLink} from 'react-icons/md'
 import {defineType} from 'sanity'
 
+import {validateLink} from './utils/linkValidation'
+
 export default defineType({
   name: 'blockContent',
   title: 'Contenu riche',
@@ -22,8 +24,9 @@ export default defineType({
             fields: [
               {
                 name: 'href',
-                type: 'url',
+                type: 'string',
                 title: 'URL',
+                validation: (Rule) => Rule.custom(validateLink),
               },
             ],
           },
