@@ -4,6 +4,8 @@ import {defineField, defineType} from 'sanity'
 import {ALL_CATEGORY_OPTIONS, getCategoriesForLocale, sanitizeCategoryValue} from './categoryOptions'
 import {CategorySelectInput} from './components/CategorySelectInput'
 
+const CATEGORY_FEATURE_ENABLED = false
+
 const isUniquePerLocale = (slug: any, context: any) => {
   const {document, getClient} = context
   const client = getClient({apiVersion: '2024-06-01'}) // adapte si besoin
@@ -141,26 +143,27 @@ export const pageType = defineType({
       name: 'categorie',
       title: 'Catégorie',
       type: 'string',
-      description: 'Sélectionnez d’abord la locale pour afficher les catégories disponibles.',
-      hidden: ({document}) => !document?.locale,
-      components: {
-        input: CategorySelectInput,
-      },
-      options: {
-        list: ALL_CATEGORY_OPTIONS,
-      },
-      validation: (Rule) =>
-        Rule.required().custom((value, context) => {
-          if (!value) return true
+      hidden: CATEGORY_FEATURE_ENABLED ? ({document}) => !document?.locale : true,
+      readOnly: !CATEGORY_FEATURE_ENABLED,
+      ...(CATEGORY_FEATURE_ENABLED
+        ? {
+            description: 'Sélectionnez d’abord la locale pour afficher les catégories disponibles.',
+            components: {input: CategorySelectInput},
+            options: {list: ALL_CATEGORY_OPTIONS},
+            validation: (Rule) =>
+              Rule.required().custom((value, context) => {
+                if (!value) return true
 
-          const locale = context?.document?.locale as string | undefined
-          const available = getCategoriesForLocale(locale).map((option) => option.value)
-          const normalizedAvailable = new Set(available.map(sanitizeCategoryValue))
+                const locale = context?.document?.locale as string | undefined
+                const available = getCategoriesForLocale(locale).map((option) => option.value)
+                const normalizedAvailable = new Set(available.map(sanitizeCategoryValue))
 
-          return normalizedAvailable.has(sanitizeCategoryValue(value))
-            ? true
-            : 'Cette catégorie n’est pas disponible pour la locale sélectionnée.'
-        }),
+                return normalizedAvailable.has(sanitizeCategoryValue(value))
+                  ? true
+                  : 'Cette catégorie n’est pas disponible pour la locale sélectionnée.'
+              }),
+          }
+        : {}),
     }),
     defineField({
       name: 'sourceId',
