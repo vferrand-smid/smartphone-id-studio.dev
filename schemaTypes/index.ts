@@ -1,6 +1,7 @@
 import {authorType} from './authorType'
 import {cellRichText} from './cellRichText'
 import {externalImageType} from './externalImageType'
+import {faqPage} from './faqPage'
 import link from './link'
 import {pageType} from './pageType'
 import legalPage from './legalPage'
@@ -20,4 +21,5 @@ export const schemaTypes = [
   cellRichText,
   tableCustom,
   legalPage,
+  faqPage,
 ]

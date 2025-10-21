@@ -1,6 +1,7 @@
 import {colorInput} from '@sanity/color-input'
 import {visionTool} from '@sanity/vision'
 import {defineConfig, SchemaTypeDefinition} from 'sanity'
+import {media} from 'sanity-plugin-media'
 import {presentationTool} from 'sanity/presentation'
 import {structureTool} from 'sanity/structure'
 import {schemaTypes} from './schemaTypes'
@@ -19,6 +20,7 @@ export default defineConfig({
   dataset: process.env.SANITY_STUDIO_DATASET!,
 
   plugins: [
+    media(),
     colorInput(),
     structureTool({structure}),
     presentationTool({

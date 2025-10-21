@@ -62,7 +62,11 @@ export const structure = async (S: StructureBuilder) => {
       .child(
         S.documentList()
           .title(label)
-          .filter(filter)
+          // 🔎 Restrict search to exact slug matches when a search term is provided
+          .filter(
+            `(${filter}) && (string::split(lower($__query), "*")[0] == "" || lower(slug.current) == string::split(lower($__query), "*")[0])`,
+          )
+          .params({__query: '*'})
           .defaultOrdering([{field: 'title', direction: 'asc'}]),
       ),
   )
@@ -78,8 +82,9 @@ export const structure = async (S: StructureBuilder) => {
       S.documentList()
         .title('Pages sans locale')
         .defaultOrdering([{field: 'title', direction: 'asc'}])
+        .params({__query: '*'})
         .filter(
-          '_type == "page" && (!defined(locale) || locale == null || locale == "" || locale == "und")',
+          '_type == "page" && (!defined(locale) || locale == null || locale == "" || locale == "und") && (string::split(lower($__query), "*")[0] == "" || lower(slug.current) == string::split(lower($__query), "*")[0])',
         ),
     )
 
@@ -95,8 +100,11 @@ export const structure = async (S: StructureBuilder) => {
         .child(
           S.documentList()
             .title(`Pages – ${locale}`)
-            .filter('_type == "page" && locale == $locale')
-            .params({locale})
+            // 🔎 Force the desk search to match on slugs only (avoids keyword matches in body text)
+            .filter(
+              '_type == "page" && locale == $locale && (string::split(lower($__query), "*")[0] == "" || lower(slug.current) == string::split(lower($__query), "*")[0])',
+            )
+            .params({locale, __query: '*'})
             .defaultOrdering([{field: 'title', direction: 'asc'}])
             .child((documentId) => {
               return S.document()
@@ -157,6 +165,23 @@ export const structure = async (S: StructureBuilder) => {
 
       // Section dédiée aux pages légales (singletons)
       buildLegalSection(S),
+
+      S.listItem()
+        .title('FAQ — Pages ❓')
+        .child(
+          S.documentTypeList('faqPage')
+            .title('FAQ — Pages locales')
+            .defaultOrdering([
+              {field: 'locale', direction: 'asc'},
+              {field: '_updatedAt', direction: 'desc'},
+            ])
+            .child((documentId) =>
+              S.document()
+                .documentId(documentId)
+                .schemaType('faqPage')
+                .views([S.view.form(), S.view.component(IframePreview).title('Preview')]),
+            ),
+        ),
 
       S.listItem()
         .title('Auteurs 🧑‍💻')

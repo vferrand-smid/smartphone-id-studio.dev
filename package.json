@@ -36,7 +36,7 @@
     "@sanity/presentation": "^2.0.0",
     "@sanity/preview-kit": "^6.1.1",
     "@sanity/types": "^3.88.3",
-    "@sanity/vision": "^4.10.1",
+    "@sanity/vision": "^4.10.2",
     "@sanity/visual-editing": "^2.13.21",
     "@sindresorhus/slugify": "^2.2.1",
     "@types/axios": "^0.14.4",
@@ -50,7 +50,8 @@
     "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",
     "react-is": "^18.2.0",
-    "sanity": "^4.10.1",
+    "sanity": "^4.10.2",
+    "sanity-plugin-media": "^4.0.0",
     "slugify": "^1.6.6",
     "styled-components": "^6.1.18"
   },

@@ -3,6 +3,7 @@ import {defineField, defineType} from 'sanity'
 
 import {ALL_CATEGORY_OPTIONS, getCategoriesForLocale, sanitizeCategoryValue} from './categoryOptions'
 import {CategorySelectInput} from './components/CategorySelectInput'
+import {LOCALE_OPTIONS} from './utils/localeOptions'
 
 const CATEGORY_FEATURE_ENABLED = false
 
@@ -99,43 +100,7 @@ export const pageType = defineType({
       title: 'Locale',
       type: 'string',
       options: {
-        list: [
-          {title: 'Arabic', value: 'ar'},
-          {title: 'Arabic (Saudi Arabia) 🇸🇦', value: 'ar-SA'},
-          {title: 'Arabic (United Arab Emirates) 🇦🇪', value: 'ar-AE'},
-          {title: 'Chinese (China) 🇨🇳', value: 'zh-CN'},
-          {title: 'Deutsch 🇩🇪', value: 'de'},
-          {title: 'Deutsch (Germany) 🇩🇪', value: 'de-DE'},
-          {title: 'Deutsch (Switzerland) 🇨🇭', value: 'de-CH'},
-          {title: 'English 🇺🇸', value: 'en'},
-          {title: 'English (Australia) 🇦🇺', value: 'en-AU'},
-          {title: 'English (Canada) 🇨🇦', value: 'en-CA'},
-          {title: 'English (UK) 🇬🇧', value: 'en-GB'},
-          {title: 'English (India) 🇮🇳', value: 'en-IN'},
-          {title: 'English (Ireland) 🇮🇪', value: 'en-IE'},
-          {title: 'English (Nigeria) 🇳🇬', value: 'en-NG'},
-          {title: 'English (New Zealand) 🇳🇿', value: 'en-NZ'},
-          {title: 'English (Singapore) 🇸🇬', value: 'en-SG'},
-          {title: 'English (South Africa) 🇿🇦', value: 'en-ZA'},
-          {title: 'English (US) 🇺🇸', value: 'en-US'},
-          {title: 'Estonian (Estonia) 🇪🇪', value: 'et-EE'},
-          {title: 'Spanish (Argentina) 🇦🇷', value: 'es-AR'},
-          {title: 'Spanish (Colombia) 🇨🇴', value: 'es-CO'},
-          {title: 'Spanish 🇪🇸', value: 'es-ES'},
-          {title: 'Spanish (Mexico) 🇲🇽', value: 'es-MX'},
-          {title: 'Netherlands (Belgium) 🇧🇪', value: 'nl-BE'},
-          {title: 'Netherlands (Netherlands) 🇳🇱', value: 'nl-NL'},
-          {title: 'Français (Belgium) 🇧🇪', value: 'fr-BE'},
-          {title: 'Français (Canada) 🇨🇦', value: 'fr-CA'},
-          {title: 'Français (France) 🇫🇷', value: 'fr-FR'},
-          {title: 'Français (Suisse) 🇨🇭', value: 'fr-CH'},
-          {title: 'Italian (Italy) 🇮🇹', value: 'it-IT'},
-          {title: 'Polish (Poland) 🇵🇱', value: 'pl-PL'},
-          {title: 'Portuguese (Brazil) 🇧🇷', value: 'pt-BR'},
-          {title: 'Portuguese (Portugal) 🇵🇹', value: 'pt-PT'},
-          {title: 'Russian (Russia) 🇷🇺', value: 'ru-RU'},
-          {title: 'Swedish (Sweden) 🇸🇪', value: 'sv-SE'},
-        ],
+        list: LOCALE_OPTIONS,
       },
       validation: (Rule) => Rule.required(),
     }),
@@ -175,6 +140,11 @@ export const pageType = defineType({
       type: 'boolean',
       hidden: true,
     }),
+  ],
+  __experimental_search: [
+    {path: 'slug.current', weight: 80, mapWith: 'lower'},
+    {path: 'title', weight: 40},
+    {path: 'locale', weight: 10},
   ],
   // Option de tri par langue dans Sanity
   orderings: [
