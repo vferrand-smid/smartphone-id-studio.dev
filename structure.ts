@@ -1,15 +1,8 @@
-import {createClient} from '@sanity/client'
 import {StructureBuilder} from 'sanity/structure'
 import IframePreview from './IframePreview'
 import {getLocales} from './migrations/lib/getLocales'
 
-const client = createClient({
-  projectId: process.env.SANITY_STUDIO_PROJECT_ID!,
-  dataset: process.env.SANITY_STUDIO_DATASET!,
-  apiVersion: process.env.SANITY_STUDIO_API_VERSION!,
-  useCdn: false,
-  perspective: 'raw',
-})
+// Pas d'import @sanity/client : on utilise le client fourni par le Studio via `context`
 
 function flagEmojiFromLocale(locale: string) {
   const code = locale.split('-')[1] || locale
@@ -18,25 +11,27 @@ function flagEmojiFromLocale(locale: string) {
     .replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)))
 }
 
-export const structure = async (S: StructureBuilder) => {
-  const locales = (await getLocales()) || []
+export const structure = async (S: StructureBuilder, context: unknown) => {
+  const client = (context as any).getClient({apiVersion: '2024-10-01'})
+
+  const locales: string[] = (await getLocales()) || []
 
   // ➕ Compter les pages par statut
-  const [countPublished, countDraft, countTrash, countUndefined] = await Promise.all([
-    client.fetch<number>('count(*[_type == "page" && status == "publish"])'),
-    client.fetch<number>('count(*[_type == "page" && status == "draft"])'),
-    client.fetch<number>('count(*[_type == "page" && status == "trash"])'),
-    client.fetch<number>(
+  const [countPublished, countDraft, countTrash, countUndefined] = (await Promise.all([
+    client.fetch('count(*[_type == "page" && status == "publish"])'),
+    client.fetch('count(*[_type == "page" && status == "draft"])'),
+    client.fetch('count(*[_type == "page" && status == "trash"])'),
+    client.fetch(
       `count(*[
-    _type == "page" &&
-    !defined(status) &&
-    !(_id in path("drafts.**")) &&
-    !(_id match "_.%") &&
-    !(_id match "_.**") &&
-    !(_id match "*i18n*" || _id match "*translation*")
-  ])`,
+        _type == "page" &&
+        !defined(status) &&
+        !(_id in path("drafts.**")) &&
+        !(_id match "_.%") &&
+        !(_id match "_.**") &&
+        !(_id match "*i18n*" || _id match "*translation*")
+      ])`,
     ),
-  ])
+  ])) as [number, number, number, number]
 
   // ➕ Créer dynamiquement les items par statut
   const statusItems = [
@@ -62,7 +57,7 @@ export const structure = async (S: StructureBuilder) => {
       .child(
         S.documentList()
           .title(label)
-          // 🔎 Restrict search to exact slug matches when a search term is provided
+          // 🔎 Restreint la recherche aux slugs exacts si terme fourni
           .filter(
             `(${filter}) && (string::split(lower($__query), "*")[0] == "" || lower(slug.current) == string::split(lower($__query), "*")[0])`,
           )
@@ -72,9 +67,9 @@ export const structure = async (S: StructureBuilder) => {
   )
 
   // ➕ Pages sans locale
-  const undefinedLocaleCount = await client.fetch<number>(
+  const undefinedLocaleCount = (await client.fetch(
     `count(*[_type == "page" && (!defined(locale) || locale == null || locale == "" || locale == "und")])`,
-  )
+  )) as number
 
   const undefinedLocaleItem = S.listItem()
     .title(`❓ Locale manquante (${undefinedLocaleCount})`)
@@ -91,32 +86,32 @@ export const structure = async (S: StructureBuilder) => {
   // ➕ Créer dynamiquement les items par locale
   const localeItems = await Promise.all(
     locales.map(async (locale: string) => {
-      const count = await client.fetch<number>(`count(*[_type == "page" && locale == $locale])`, {
+      const count = (await client.fetch(`count(*[_type == "page" && locale == $locale])`, {
         locale,
-      })
+      })) as number
 
       return S.listItem()
         .title(`${flagEmojiFromLocale(locale)} Pages (${locale} – ${count})`)
         .child(
           S.documentList()
             .title(`Pages – ${locale}`)
-            // 🔎 Force the desk search to match on slugs only (avoids keyword matches in body text)
+            // 🔎 Recherche Desk forcée sur le slug
             .filter(
               '_type == "page" && locale == $locale && (string::split(lower($__query), "*")[0] == "" || lower(slug.current) == string::split(lower($__query), "*")[0])',
             )
             .params({locale, __query: '*'})
             .defaultOrdering([{field: 'title', direction: 'asc'}])
-            .child((documentId) => {
-              return S.document()
+            .child((documentId) =>
+              S.document()
                 .documentId(documentId)
                 .schemaType('page')
-                .views([S.view.form(), S.view.component(IframePreview).title('Preview')])
-            }),
+                .views([S.view.form(), S.view.component(IframePreview).title('Preview')]),
+            ),
         )
     }),
   )
 
-  // ⚖️ Section "Pages légales" (FR/EN uniquement, IDs fixes)
+  // ⚖️ Section "Pages légales" (IDs fixes)
   const buildLegalSection = (S: StructureBuilder) => {
     const legalDocs = [
       {title: 'Privacy (FR)', id: 'legal_privacy_fr'},
@@ -163,7 +158,6 @@ export const structure = async (S: StructureBuilder) => {
 
       S.divider(),
 
-      // Section dédiée aux pages légales (singletons)
       buildLegalSection(S),
 
       S.listItem()
