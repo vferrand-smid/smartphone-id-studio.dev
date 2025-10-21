@@ -28,7 +28,6 @@
     "sanity"
   ],
   "dependencies": {
-    "@sanity/block-tools": "^3.70.0",
     "@sanity/cli": "^3.88.3",
     "@sanity/color-input": "^4.0.4",
     "@sanity/icons": "^3.7.0",
@@ -59,7 +58,7 @@
     "@sanity/types": "^3.88.3"
   },
   "devDependencies": {
-    "@portabletext/block-tools": "^1.1.26",
+    "@portabletext/block-tools": "^3.5.11",
     "@sanity/eslint-config-studio": "^5.0.1",
     "@types/jsdom": "^21.1.7",
     "@types/react": "^18.0.25",
