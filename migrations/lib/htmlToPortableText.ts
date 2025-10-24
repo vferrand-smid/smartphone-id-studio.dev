@@ -5,6 +5,7 @@ import fs from 'fs/promises'
 import {decode} from 'html-entities'
 import {HTMLElement, parse} from 'node-html-parser'
 import pLimit from 'p-limit'
+import {normalizeAssetFilename} from './normalizeAssetFilename'
 
 const sanityClient = createClient({
   projectId: process.env.SANITY_PROJECT_ID!,
@@ -58,7 +59,7 @@ async function uploadImageToSanity(url: string) {
       }
 
       const asset = await sanityClient.assets.upload('image', buffer, {
-        filename: url.split('/').pop(),
+        filename: normalizeAssetFilename({url}),
       })
 
       // Vérifie qu'elle est bien dispo dans Sanity

@@ -6,6 +6,7 @@ import {presentationTool} from 'sanity/presentation'
 import {structureTool} from 'sanity/structure'
 import {schemaTypes} from './schemaTypes'
 import {structure} from './structure'
+import {normalizedAssetFilenamesPlugin} from './plugins/normalizedAssetFilenames'
 import './styles/global.css'
 
 console.log('SANITY_PROJECT_ID:', process.env.SANITY_STUDIO_PROJECT_ID)
@@ -22,6 +23,7 @@ export default defineConfig({
   plugins: [
     media(),
     colorInput(),
+    normalizedAssetFilenamesPlugin(),
     structureTool({structure}),
     presentationTool({
       previewUrl: {

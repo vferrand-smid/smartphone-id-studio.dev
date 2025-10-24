@@ -1,5 +1,6 @@
 import {createClient} from '@sanity/client'
 import axios from 'axios'
+import {normalizeAssetFilename} from '../lib/normalizeAssetFilename'
 
 const sanityClient = createClient({
   projectId: process.env.SANITY_STUDIO_PROJECT_ID,
@@ -15,7 +16,7 @@ async function testUpload() {
   const buffer = Buffer.from(response.data)
 
   const asset = await sanityClient.assets.upload('image', buffer, {
-    filename: url.split('/').pop(),
+    filename: normalizeAssetFilename({url}),
   })
 
   console.log('✅ Image uploadée →', asset._id)

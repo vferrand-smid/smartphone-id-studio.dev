@@ -1,5 +1,6 @@
 import {createClient} from '@sanity/client'
 import axios from 'axios'
+import {normalizeAssetFilename} from './normalizeAssetFilename'
 
 const client = createClient({
   projectId: process.env.SANITY_PROJECT_ID!,
@@ -11,8 +12,9 @@ const client = createClient({
 export async function importImage(url: string): Promise<string> {
   const response = await axios.get(url, {responseType: 'arraybuffer'})
 
-  const asset = await client.assets.upload('image', response.data, {
-    filename: url.split('/').pop(),
+  const buffer = Buffer.from(response.data)
+  const asset = await client.assets.upload('image', buffer, {
+    filename: normalizeAssetFilename({url}),
   })
 
   return asset._id

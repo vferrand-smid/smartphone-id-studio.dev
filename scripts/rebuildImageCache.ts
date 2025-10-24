@@ -3,6 +3,7 @@ import fs from 'fs/promises'
 import fetch from 'node-fetch'
 import path from 'path'
 import {fileURLToPath} from 'url'
+import {normalizeAssetFilename} from '../migrations/lib/normalizeAssetFilename'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -57,7 +58,7 @@ async function uploadAllImages() {
       const buffer = await res.arrayBuffer()
 
       const asset = await client.assets.upload('image', Buffer.from(buffer), {
-        filename: url.split('/').pop(),
+        filename: normalizeAssetFilename({url}),
       })
 
       imageCache[url] = asset._id

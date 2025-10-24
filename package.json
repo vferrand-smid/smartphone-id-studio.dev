@@ -28,6 +28,7 @@
     "sanity"
   ],
   "dependencies": {
+    "@portabletext/sanity-bridge": "^1.1.15",
     "@sanity/cli": "^3.88.3",
     "@sanity/client": "^7.12.0",
     "@sanity/color-input": "^4.0.4",
