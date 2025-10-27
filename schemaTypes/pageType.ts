@@ -1,11 +1,12 @@
 import {DocumentIcon} from '@sanity/icons'
 import {defineField, defineType} from 'sanity'
 
-import {ALL_CATEGORY_OPTIONS, getCategoriesForLocale, sanitizeCategoryValue} from './categoryOptions'
-import {CategorySelectInput} from './components/CategorySelectInput'
+//import {ALL_CATEGORY_OPTIONS, getCategoriesForLocale, sanitizeCategoryValue} from './categoryOptions'
+//import {CategorySelectInput} from './components/CategorySelectInput'
+import DocumentAssocieInput from './components/DocumentAssocieInput'
 import {LOCALE_OPTIONS} from './utils/localeOptions'
 
-const CATEGORY_FEATURE_ENABLED = false
+//const CATEGORY_FEATURE_ENABLED = false
 
 const isUniquePerLocale = (slug: any, context: any) => {
   const {document, getClient} = context
@@ -105,31 +106,40 @@ export const pageType = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'categorie',
-      title: 'Catégorie',
+      name: 'documentAssocie',
+      title: 'Document associé',
       type: 'string',
-      hidden: CATEGORY_FEATURE_ENABLED ? ({document}) => !document?.locale : true,
-      readOnly: !CATEGORY_FEATURE_ENABLED,
-      ...(CATEGORY_FEATURE_ENABLED
-        ? {
-            description: 'Sélectionnez d’abord la locale pour afficher les catégories disponibles.',
-            components: {input: CategorySelectInput},
-            options: {list: ALL_CATEGORY_OPTIONS},
-            validation: (Rule) =>
-              Rule.required().custom((value, context) => {
-                if (!value) return true
-
-                const locale = context?.document?.locale as string | undefined
-                const available = getCategoriesForLocale(locale).map((option) => option.value)
-                const normalizedAvailable = new Set(available.map(sanitizeCategoryValue))
-
-                return normalizedAvailable.has(sanitizeCategoryValue(value))
-                  ? true
-                  : 'Cette catégorie n’est pas disponible pour la locale sélectionnée.'
-              }),
-          }
-        : {}),
+      components: {
+        input: DocumentAssocieInput,
+      },
     }),
+
+    // defineField({
+    //   name: 'categorie',
+    //   title: 'Catégorie',
+    //   type: 'string',
+    //   hidden: CATEGORY_FEATURE_ENABLED ? ({document}) => !document?.locale : true,
+    //   readOnly: !CATEGORY_FEATURE_ENABLED,
+    //   ...(CATEGORY_FEATURE_ENABLED
+    //     ? {
+    //         description: 'Sélectionnez d’abord la locale pour afficher les catégories disponibles.',
+    //         components: {input: CategorySelectInput},
+    //         options: {list: ALL_CATEGORY_OPTIONS},
+    //         validation: (Rule) =>
+    //           Rule.required().custom((value, context) => {
+    //             if (!value) return true
+
+    //             const locale = context?.document?.locale as string | undefined
+    //             const available = getCategoriesForLocale(locale).map((option) => option.value)
+    //             const normalizedAvailable = new Set(available.map(sanitizeCategoryValue))
+
+    //             return normalizedAvailable.has(sanitizeCategoryValue(value))
+    //               ? true
+    //               : 'Cette catégorie n’est pas disponible pour la locale sélectionnée.'
+    //           }),
+    //       }
+    //     : {}),
+    // }),
     defineField({
       name: 'sourceId',
       type: 'number',
