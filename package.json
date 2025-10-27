@@ -39,6 +39,7 @@
     "@sanity/types": "^3.88.3",
     "@sanity/vision": "^4.11.0",
     "@sanity/visual-editing": "^2.13.21",
+    "@sanity/ui": "^2.8.11",
     "@sindresorhus/slugify": "^2.2.1",
     "@types/axios": "^0.14.4",
     "@types/dotenv": "^8.2.3",
