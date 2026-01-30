@@ -59,6 +59,20 @@ export const pageType = defineType({
     defineField({name: 'date', type: 'datetime'}),
     defineField({name: 'modified', type: 'datetime'}),
     defineField({
+      name: 'popularScore',
+      type: 'number',
+      title: 'Popularité (manuel)',
+      description: 'Score manuel pour booster les articles les plus lus.',
+      initialValue: 0,
+    }),
+    defineField({
+      name: 'readCount',
+      type: 'number',
+      title: 'Nombre de lectures',
+      description: 'Métrique auto (analytics).',
+      readOnly: true,
+    }),
+    defineField({
       name: 'status',
       type: 'string',
       options: {

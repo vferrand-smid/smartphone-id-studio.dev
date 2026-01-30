@@ -22,12 +22,14 @@
     "migrate:pages": "sanity migration run import-wp-graphql --dataset dev --project uvnumxlz --no-dry-run",
     "count-pages": "tsx migrations/count-pages/index.ts",
     "count-pages-sanity": "tsx migrations/count-pages/countPagesSanity.ts",
-    "delete-pages": "dotenv -e .env.development -- tsx migrations/tools/delete-pages.ts"
+    "delete-pages": "dotenv -e .env.development -- tsx migrations/tools/delete-pages.ts",
+    "update-readcount": "tsx migrations/tools/update-readcount.ts"
   },
   "keywords": [
     "sanity"
   ],
   "dependencies": {
+    "@google-analytics/data": "^5.2.1",
     "@portabletext/sanity-bridge": "^1.1.15",
     "@sanity/cli": "^3.88.3",
     "@sanity/client": "^7.12.0",

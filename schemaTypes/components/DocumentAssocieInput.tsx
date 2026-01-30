@@ -25,7 +25,19 @@ export default function DocumentAssocieInput(props: DocumentAssocieInputProps) {
   const [documents, setDocuments] = useState<AssociatedDocument[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const options = useMemo(() => documents.map((doc) => ({value: doc.id, label: doc.purpose?.label || doc.id})), [documents])
+  const options = useMemo(() => {
+    const baseOptions = documents.map((doc) => ({value: doc.id, label: doc.purpose?.label || doc.id}))
+    const manualOption = {value: 'photo-identite', label: "Photo d'identité"}
+    const normalizedLabel = manualOption.label.toLowerCase()
+    const hasManual = baseOptions.some(
+      (option) => option.value === manualOption.value || option.label.toLowerCase() === normalizedLabel,
+    )
+    const combined = hasManual ? baseOptions : [...baseOptions, manualOption]
+
+    return combined
+      .slice()
+      .sort((a, b) => a.label.localeCompare(b.label, locale, {sensitivity: 'base'}))
+  }, [documents, locale])
 
   useEffect(() => {
     async function fetchDocs() {
