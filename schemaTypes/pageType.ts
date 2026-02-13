@@ -7,10 +7,18 @@ import DocumentAssocieInput from './components/DocumentAssocieInput'
 import {LOCALE_OPTIONS} from './utils/localeOptions'
 
 //const CATEGORY_FEATURE_ENABLED = false
+const API_VERSION = '2024-06-01'
+
+const DUPLICATE_SEO_DESCRIPTION_QUERY = `count(*[
+  _type == "page" &&
+  defined(seo.description) &&
+  seo.description == $description &&
+  !(_id in [$draftId, $publishedId])
+])`
 
 const isUniquePerLocale = (slug: any, context: any) => {
   const {document, getClient} = context
-  const client = getClient({apiVersion: '2024-06-01'}) // adapte si besoin
+  const client = getClient({apiVersion: API_VERSION}) // adapte si besoin
 
   const id = document?._id?.replace(/^drafts\./, '')
   const type = document?._type || 'page'
@@ -126,6 +134,49 @@ export const pageType = defineType({
       components: {
         input: DocumentAssocieInput,
       },
+    }),
+    defineField({
+      name: 'seo',
+      title: 'SEO',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'title',
+          title: 'Meta title',
+          type: 'string',
+          validation: (Rule) => [
+            Rule.required().warning('Le meta title est recommandé'),
+            Rule.max(70).warning('Idéalement <= 60-70 caractères'),
+          ],
+        }),
+        defineField({
+          name: 'description',
+          title: 'Meta description',
+          type: 'text',
+          rows: 4,
+          validation: (Rule) => [
+            Rule.required().warning('La meta description est recommandée'),
+            Rule.min(70).warning('Idéalement >= 70 caractères'),
+            Rule.max(160).warning('Idéalement <= 160 caractères'),
+            Rule.custom(async (value, context) => {
+              const description = typeof value === 'string' ? value.trim() : ''
+              if (!description) return true
+
+              const docId = (context.document?._id || '').replace(/^drafts\./, '')
+              if (!docId) return true
+
+              const client = context.getClient({apiVersion: API_VERSION})
+              const count = await client.fetch(DUPLICATE_SEO_DESCRIPTION_QUERY, {
+                description,
+                draftId: `drafts.${docId}`,
+                publishedId: docId,
+              })
+
+              return count > 0 ? 'Meta description déjà utilisée sur une autre page.' : true
+            }).warning(),
+          ],
+        }),
+      ],
     }),
 
     // defineField({
