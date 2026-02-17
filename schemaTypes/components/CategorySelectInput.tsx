@@ -4,7 +4,7 @@ import {set, useFormValue, type StringInputProps} from 'sanity'
 import {getCategoriesForLocale, sanitizeCategoryValue} from '../categoryOptions'
 
 export function CategorySelectInput(props: StringInputProps) {
-  const {renderDefault, schemaType, options, value, onChange} = props
+  const {renderDefault, schemaType, value, onChange} = props
   const localeValue = useFormValue(['locale'])
   const locale = typeof localeValue === 'string' ? localeValue : undefined
   const list = useMemo(() => getCategoriesForLocale(locale), [locale])
@@ -17,21 +17,16 @@ export function CategorySelectInput(props: StringInputProps) {
     }
   }, [value, onChange])
 
-  const optionsWithList = useMemo(
-    () => ({
-      ...(options ?? {}),
-      list,
-    }),
-    [options, list],
-  )
-
   const schemaTypeWithList = useMemo(
     () => ({
       ...schemaType,
-      options: optionsWithList,
+      options: {
+        ...(schemaType.options ?? {}),
+        list,
+      },
     }),
-    [schemaType, optionsWithList],
+    [schemaType, list],
   )
 
-  return renderDefault({...props, schemaType: schemaTypeWithList, options: optionsWithList})
+  return renderDefault({...props, schemaType: schemaTypeWithList})
 }

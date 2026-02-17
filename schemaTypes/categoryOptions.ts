@@ -75,6 +75,10 @@ const CATEGORY_DEFINITIONS = {
       'pt-br': 'Carteira de identidade',
     },
   },
+  'carte-vitale': {
+    value: 'carte-vitale',
+    defaultTitle: 'Carte vitale',
+  },
   visa: {
     value: 'visa',
     defaultTitle: 'Visa',
@@ -280,13 +284,14 @@ type CategoryId = keyof typeof CATEGORY_DEFINITIONS
 const CATEGORY_IDS_BY_LOCALE: Record<string, CategoryId[]> = {
   default: [],
   'fr-fr': [
-    'test',
-    'photos-identité-DIY',
+    'photos-identité',
     'produit-ephoto',
     'permis-de-conduire',
     'titre-de-sejour',
     'passeport',
     'carte-d-identite',
+    'carte-vitale',
+    'visa',
     'articles-divers',
   ],
   'en-us': [
