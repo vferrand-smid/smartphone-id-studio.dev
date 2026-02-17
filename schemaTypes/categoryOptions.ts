@@ -284,15 +284,15 @@ type CategoryId = keyof typeof CATEGORY_DEFINITIONS
 const CATEGORY_IDS_BY_LOCALE: Record<string, CategoryId[]> = {
   default: [],
   'fr-fr': [
-    'photos-identité',
-    'produit-ephoto',
-    'permis-de-conduire',
-    'titre-de-sejour',
-    'passeport',
+    'articles-divers',
     'carte-d-identite',
     'carte-vitale',
+    'passeport',
+    'permis-de-conduire',
+    'photos-identité',
+    'produit-ephoto',
+    'titre-de-sejour',
     'visa',
-    'articles-divers',
   ],
   'en-us': [
     'passport-photos-requirements',
@@ -530,6 +530,7 @@ const getCategoriesForLocale = (locale?: string): CategoryOption[] => {
       return {value, title}
     })
     .filter((option): option is CategoryOption => Boolean(option))
+    .sort((a, b) => a.title.localeCompare(b.title, localeCandidates[0], {sensitivity: 'base'}))
 }
 
 const ALL_CATEGORY_OPTIONS: CategoryOption[] = (Object.keys(CATEGORY_DEFINITIONS) as CategoryId[]).map((id) => ({
