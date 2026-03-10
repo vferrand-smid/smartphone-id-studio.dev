@@ -1,12 +1,9 @@
 export const LOCALE_OPTIONS = [
-  {title: 'Arabic', value: 'ar'},
   {title: 'Arabic (Saudi Arabia) 🇸🇦', value: 'ar-SA'},
   {title: 'Arabic (United Arab Emirates) 🇦🇪', value: 'ar-AE'},
   {title: 'Chinese (China) 🇨🇳', value: 'zh-CN'},
-  {title: 'Deutsch 🇩🇪', value: 'de'},
   {title: 'Deutsch (Germany) 🇩🇪', value: 'de-DE'},
   {title: 'Deutsch (Switzerland) 🇨🇭', value: 'de-CH'},
-  {title: 'English 🇺🇸', value: 'en'},
   {title: 'English (Australia) 🇦🇺', value: 'en-AU'},
   {title: 'English (Canada) 🇨🇦', value: 'en-CA'},
   {title: 'English (UK) 🇬🇧', value: 'en-GB'},
