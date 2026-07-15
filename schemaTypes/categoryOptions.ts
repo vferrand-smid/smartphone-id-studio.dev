@@ -32,6 +32,7 @@ const CATEGORY_DEFINITIONS = {
     defaultTitle: 'Permis de conduire',
     titles: {
       en: "Driver's License",
+      'en-gb': 'Driving licence',
       'it-it': 'Patente di guida',
       'es-es': 'Permiso de conducir',
       'es-mx': 'Permiso de conducir',
@@ -94,6 +95,9 @@ const CATEGORY_DEFINITIONS = {
   'passport-photos-requirements': {
     value: 'Passport-Photos-Requirements',
     defaultTitle: 'Passport Photos Requirements',
+    titles: {
+      'en-gb': 'Passport photo',
+    },
   },
   'passport-photos-DIY': {
     value: 'passport-photos-DIY',
@@ -122,9 +126,16 @@ const CATEGORY_DEFINITIONS = {
     value: 'uk-idpc',
     defaultTitle: 'UK IDPC',
   },
+  'digital-photo-code': {
+    value: 'digital-photo-code',
+    defaultTitle: 'Digital photo code',
+  },
   'id-citizen-cards': {
     value: 'id-citizen-cards',
     defaultTitle: 'ID & Citizen Cards',
+    titles: {
+      'en-gb': 'ID & citizen card',
+    },
   },
   'pet-passport': {
     value: 'pet-passport',
@@ -305,15 +316,11 @@ const CATEGORY_IDS_BY_LOCALE: Record<string, CategoryId[]> = {
   ],
   'en-gb': [
     'passport-photos-requirements',
-    'passport-photos-DIY',
-    'passport-photos-services-locations',
-    'passeport',
     'permis-de-conduire',
-    'visa',
-    'uk-idpc',
     'id-citizen-cards',
-    'pet-passport',
-    'international-passport-photo',
+    'passeport',
+    'visa',
+    'digital-photo-code',
   ],
   'en-ca': [
     'passport-photo-requirements-DIY',
